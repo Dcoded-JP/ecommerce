@@ -1,0 +1,187 @@
+@extends('Backend.layouts.backend')
+
+@section('title')
+Index Category
+@endsection
+
+
+@section('content')
+ <!-- Main Content -->
+ <div class="content">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                      <a href="{{Route('category.create')}}" class="btn btn-success">
+                        <span title="Add Category">
+                            <i class="fa-solid fa-plus"></i> Category
+                           </span>
+                      </a>
+                      <button id="deleteSelected" class="btn btn-dark"><i class="fa-solid fa-trash"></i> Delete Selected</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <i class="fas fa-shopping-cart me-2"></i>
+                  Category List
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-striped display" id="categoryTable" >
+                      <thead>
+                        <tr>
+                            <th><input type="checkbox" class="form-check-input" id="selectAll"></th>
+                            <th>Category ID</th>
+                            <th>Name</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                      </thead>
+                     @if($category)
+                     <tbody>
+                       @foreach($category as $ct)
+                        <tr>
+                            <td><input type="checkbox" class="category-check form-check-input" value="{{$ct->id}}"></td>
+                            <td>{{$ct->id}}</td>
+                            <td>{{$ct->category_name}}</td>
+                            <td>{{$ct->created_at}}</td>
+                            <td>{{$ct->updated_at}}</td>
+                            <td>
+                                <a href="{{Route('category.show', $ct->id)}}" class="btn btn-light" title="Show"><i class="fa-solid fa-eye"></i></a>
+                                <a href="{{Route('category.edit', $ct->id)}}" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
+
+                                <form action="{{Route('category.destroy', $ct->id)}}" method="POST" style="display: inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to delete this?')"><i class="fa-solid fa-trash" title="Delete" ></i></button>
+                                </form>
+
+
+
+                            </td>
+                        </tr>
+                       @endforeach
+                      </tbody>
+                     @else
+                     <tbody>
+                        No Category
+                     </tbody>
+                     @endif
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+
+
+
+@endsection
+
+
+@push('js')
+<script>
+    $(document).ready(function () {
+        $('#categoryTable').DataTable();
+    });
+
+
+    $(document).ready(function() {
+    var table = $('#categoryTable').DataTable();
+
+    // Select All Checkbox
+    $('#selectAll').on('click', function() {
+        $('.category-check').prop('checked', this.checked);
+    });
+
+    // If any individual checkbox is unchecked, uncheck "Select All" checkbox
+    $(document).on('change', '.category-check', function() {
+        if (!$(this).prop("checked")) {
+            $('#selectAll').prop("checked", false);
+        }
+    });
+
+
+
+    // Mass Delete Functionality
+    $('#deleteSelected').on('click', function() {
+        var selectedIds = [];
+
+        $('.category-check:checked').each(function() {
+            selectedIds.push($(this).val());
+        });
+
+        if (selectedIds.length === 0) {
+            alert("Please select at least one Category to delete.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete the selected Categories?")) {
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('category.massDelete') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                ids: selectedIds
+            },
+            success: function(response) {
+                   // Display SweetAlert for success message
+    Swal.fire({
+    title: 'Success!',
+    text: response.message,
+    icon: 'success',
+    confirmButtonText: 'OK'
+});
+// Delay execution by 2 seconds (2000 milliseconds)
+setTimeout(function() {
+    location.reload();
+}, 2000);
+
+
+
+            },
+            error: function(xhr) {
+                alert("An error occurred while deleting employees.");
+            }
+        });
+    });
+
+
+
+
+    });
+
+
+
+  </script>
+@endpush
+
+@if(Session::has('success'))
+@push('js')
+
+<script>
+    // Display SweetAlert for success message
+    Swal.fire({
+    title: 'Success!',
+    text: '{{ Session::get('success') }}',
+    icon: 'success',
+    confirmButtonText: 'OK'
+});
+</script>
+
+@endpush
+@endif
+
