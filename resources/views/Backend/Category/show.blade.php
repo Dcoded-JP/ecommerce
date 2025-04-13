@@ -23,7 +23,7 @@ Show Category
             {{-- category --}}
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header"><h3>Category Detail</h3></div>
+                    <div class="card-header"><h3><i class="fas fa-shopping-cart me-2"></i> Category Detail</h3></div>
                     <div class="card-body">
                         <table class="table">
                             <tbody>

@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Color extends Model
+class ProductImage extends Model
 {
-    protected $table = 'colors';
+    //product_img
     protected $fillable = [
-        'color_name'
+        'product_img',
     ];
 }

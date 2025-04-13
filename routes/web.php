@@ -4,7 +4,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\ProductImageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', [SiteController::class, 'index'])->name('index');
 Route::get('/signup', [SiteController::class, 'signup'])->name('signup');
@@ -18,7 +20,7 @@ Route::get('/product-details/{id}', [SiteController::class, 'productDetails'])->
 
 
 // test
-Route::view('/dashboard', 'Backend.Dashboard.dashboard');
+Route::get('/dashboard', [DashboardController::class,'dashboardShow'])->name('admin.dashboard');
 
 //Category Crud Route
 Route::resource('/category', CategoryController::class);
@@ -27,8 +29,18 @@ Route::post('/category/mass-delete', [CategoryController::class, 'massDelete'])-
 
 //Color Crud Route
 Route::resource('/color', ColorController::class);
+//color.massDelete
+Route::post('/color/mass-delete', [colorController::class, 'massDelete'])->name('color.massDelete');
 
 //Size Crud Route
 Route::resource('/size', SizeController::class);
+//size.massDelete
+Route::post('/size/mass-delete', [sizeController::class, 'massDelete'])->name('size.massDelete');
+
+
+//Product Image Crud Route
+Route::resource('/productimage', ProductImageController::class);
+//productimage.massDelete
+Route::post('/productimage/mass-delete', [ProductImageController::class, 'massDelete'])->name('productimage.massDelete');
 
 

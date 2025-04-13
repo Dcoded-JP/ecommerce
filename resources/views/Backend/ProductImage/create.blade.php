@@ -1,7 +1,7 @@
 @extends('Backend.layouts.backend')
 
 @section('title')
-Create Category
+Create Product Image
 @endsection
 
 
@@ -13,7 +13,7 @@ Create Category
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                      <a href="{{Route('category.index')}}" class="btn btn-primary"><i class="fa-solid fa-list"></i> Category List</a>
+                      <a href="{{Route('productimage.index')}}" class="btn btn-primary"><i class="fa-solid fa-list"></i> Product Image List</a>
 
                     </div>
                 </div>
@@ -23,18 +23,18 @@ Create Category
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3><i class="fas fa-shopping-cart me-2"></i> Add Category</h3>
+                        <h3><i class="fa-solid fa-image"></i> Upload New Product Image</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{Route('category.store')}}" class="form" method="POST" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+                        <form action="{{Route('productimage.store')}}" class="form" method="POST" enctype="multipart/form-data" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
                             @csrf
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <div class="form-group">
-                                            <label for="c_name" class="mb-1 bold text-capitalize">category name</label>
-                                            <input type="text" name="category_name" id="c_name" placeholder="Enter Category Name" class="form-control" value="{{old('category_name')}}" required>
-                                            @error('category_name')
+                                            <label for="p_image" class="mb-1 bold text-capitalize">Product Image</label>
+                                            <input type="file" name="productimage_name" id="p_image" class="form-control" required>
+                                            @error('productimage_name')
                                             <div class="text-danger">{{$message}}</div>
                                             @enderror
                                         </div>
@@ -45,7 +45,7 @@ Create Category
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                       <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Add Category</button>
+                                       <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Upload Image</button>
                                        <button type="reset"  class="btn btn-dark">Clear</button>
                                     </div>
                                 </div>

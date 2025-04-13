@@ -14,6 +14,9 @@
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
+{{-- Chart Js  --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -42,7 +45,7 @@
 
     <ul class="sidebar-menu">
       <li>
-        <a href="#" class="nav-link active">
+        <a href="{{Route('admin.dashboard')}}" class="nav-link active">
           <i class="fas fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
@@ -64,6 +67,8 @@
         </ul>
       </li>
 
+   
+
       <!-- Categories Section -->
       <li>
         <a href="#categoriesSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
@@ -80,6 +85,32 @@
         </ul>
       </li>
 
+       <!-- Color Section -->
+       <li>
+        <a href="#colorsSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
+          <i class="fa-solid fa-paintbrush"></i>
+          <span>Colors</span>
+          <i class="fas fa-angle-down arrow"></i>
+        </a>
+        <ul class="submenu collapse" id="colorsSubmenu">
+          <li><a href="{{Route('color.index')}}" class="nav-link">Colors List</a></li>
+          <li><a href="{{Route('color.create')}}" class="nav-link">Add Color</a></li>
+        </ul>
+      </li>
+
+      {{-- <i class="fa-solid fa-ruler"></i> --}}
+             <!-- size Section -->
+             <li>
+              <a href="#sizesSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
+                <i class="fa-solid fa-ruler"></i>
+                <span>Size</span>
+                <i class="fas fa-angle-down arrow"></i>
+              </a>
+              <ul class="submenu collapse" id="sizesSubmenu">
+                <li><a href="{{Route('size.index')}}" class="nav-link">Size List</a></li>
+                <li><a href="{{Route('size.create')}}" class="nav-link">Add Size</a></li>
+              </ul>
+            </li>
       <!-- Orders Section -->
       <li>
         <a href="#ordersSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">

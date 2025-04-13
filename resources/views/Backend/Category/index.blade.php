@@ -154,7 +154,7 @@ setTimeout(function() {
 
             },
             error: function(xhr) {
-                alert("An error occurred while deleting employees.");
+                alert("An error occurred while deleting Categories.");
             }
         });
     });
