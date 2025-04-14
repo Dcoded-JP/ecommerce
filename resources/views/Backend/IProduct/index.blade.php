@@ -29,7 +29,7 @@ Index I-Product
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                    <i class="fa-solid fa-shirt"></i>
+                    
                   I-Product List
                 </div>
                 <div class="card-body">

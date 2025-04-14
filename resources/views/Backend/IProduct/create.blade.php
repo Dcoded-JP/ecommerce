@@ -23,7 +23,7 @@ Create I-Product
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3><i class="fas fa-tshirt"></i> Add I-Product</h3>
+                        <h3> Add I-Product</h3>
                     </div>
                     <div class="card-body">
                         <form action="{{Route('iproduct.store')}}"  class="form" method="POST" enctype="multipart/form-data" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
