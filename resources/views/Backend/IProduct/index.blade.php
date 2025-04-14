@@ -1,7 +1,7 @@
 @extends('Backend.layouts.backend')
 
 @section('title')
-Index Product Image
+Index I-Product
 @endsection
 
 
@@ -14,9 +14,9 @@ Index Product Image
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                      <a href="{{Route('productimage.create')}}" class="btn btn-success">
-                        <span title="Add Product Image">
-                            <i class="fa-solid fa-plus"></i> Product Image
+                      <a href="{{Route('iproduct.create')}}" class="btn btn-success">
+                        <span title="Add I-Product">
+                            <i class="fa-solid fa-plus"></i> I-Product
                            </span>
                       </a>
                       <button id="deleteSelected" class="btn btn-dark"><i class="fa-solid fa-trash"></i> Delete Selected</button>
@@ -29,46 +29,36 @@ Index Product Image
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                    <i class="fa-solid fa-image"></i>
-                  Product Image List
+                    <i class="fa-solid fa-shirt"></i>
+                  I-Product List
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-bordered table-striped display" id="productimageTable" >
+                    <table class="table table-bordered table-striped display" id="iproductTable" >
                       <thead>
                         <tr>
-                            <th style="max-width: 7px"><input type="checkbox" class="form-check-input" id="selectAll"></th>
-                            <th style="max-width: 20px">ID</th>
-                            <th  style="max-height: 200px">Image</th>
-                            <th>I-Product Id</th>
-                            {{-- iproduct_id --}}
-
-                            <th style="max-width: 120px">Created At</th>
-
-                            <th style="max-width: 120px">Updated At</th>
-                            <th style="max-width: 100px">Actions</th>
+                            <th><input type="checkbox" class="form-check-input" id="selectAll"></th>
+                            <th>I-Product ID</th>
+                            <th>Name</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Actions</th>
                         </tr>
                       </thead>
-                     @if($productimage)
+                     @if($iproduct)
                      <tbody>
-                       @foreach($productimage as $pi)
+                       @foreach($iproduct as $cl)
                         <tr>
-                            <td><input type="checkbox" class="productimage-check form-check-input" value="{{$pi->id}}"></td>
-                            <td>{{$pi->id}}</td>
+                            <td><input type="checkbox" class="iproduct-check form-check-input" value="{{$cl->id}}"></td>
+                            <td>{{$cl->id}}</td>
+                            <td>{{$cl->iproduct_name}}</td>
+                            <td>{{$cl->created_at}}</td>
+                            <td>{{$cl->updated_at}}</td>
                             <td>
-                                <img id="product_img_preview"
-                                     src="{{ asset('storage/product_images/' . $pi->product_img) }}"
-                                     alt="Image Preview"
-                                     class="product-preview-image" style="max-height: 200px" title="{{$pi->product_img}}" />
-                           </td>
-                            <td>{{$pi->iproduct_id}}</td>
-                            <td>{{$pi->created_at}}</td>
-                            <td>{{$pi->updated_at}}</td>
-                            <td>
-                                <a href="{{Route('productimage.show', $pi->id)}}" class="btn btn-light" title="Show"><i class="fa-solid fa-eye"></i></a>
-                                <a href="{{Route('productimage.edit', $pi->id)}}" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
+                                <a href="{{Route('iproduct.show', $cl->id)}}" class="btn btn-light" title="Show"><i class="fa-solid fa-eye"></i></a>
+                                <a href="{{Route('iproduct.edit', $cl->id)}}" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
 
-                                <form action="{{Route('productimage.destroy', $pi->id)}}" method="POST" style="display: inline-block">
+                                <form action="{{Route('iproduct.destroy', $cl->id)}}" method="POST" style="display: inline-block">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to delete this?')"><i class="fa-solid fa-trash" title="Delete" ></i></button>
@@ -82,7 +72,7 @@ Index Product Image
                       </tbody>
                      @else
                      <tbody>
-                        No Product Image
+                        No iproduct
                      </tbody>
                      @endif
                     </table>
@@ -102,20 +92,20 @@ Index Product Image
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#productimageTable').DataTable();
+        $('#iproductTable').DataTable();
     });
 
 
     $(document).ready(function() {
-    var table = $('#productimageTable').DataTable();
+    var table = $('#iproductTable').DataTable();
 
     // Select All Checkbox
     $('#selectAll').on('click', function() {
-        $('.productimage-check').prop('checked', this.checked);
+        $('.iproduct-check').prop('checked', this.checked);
     });
 
     // If any individual checkbox is unchecked, uncheck "Select All" checkbox
-    $(document).on('change', '.productimage-check', function() {
+    $(document).on('change', '.iproduct-check', function() {
         if (!$(this).prop("checked")) {
             $('#selectAll').prop("checked", false);
         }
@@ -127,21 +117,21 @@ Index Product Image
     $('#deleteSelected').on('click', function() {
         var selectedIds = [];
 
-        $('.productimage-check:checked').each(function() {
+        $('.iproduct-check:checked').each(function() {
             selectedIds.push($(this).val());
         });
 
         if (selectedIds.length === 0) {
-            alert("Please select at least one Product Image to delete.");
+            alert("Please select at least one iproduct to delete.");
             return;
         }
 
-        if (!confirm("Are you sure you want to delete the selected Product Images?")) {
+        if (!confirm("Are you sure you want to delete the selected iproducts?")) {
             return;
         }
 
         $.ajax({
-            url: "{{ route('productimage.massDelete') }}",
+            url: "{{ route('iproduct.massDelete') }}",
             type: "POST",
             data: {
                 _token: "{{ csrf_token() }}",
@@ -164,7 +154,7 @@ setTimeout(function() {
 
             },
             error: function(xhr) {
-                alert("An error occurred while deleting Product Images.");
+                alert("An error occurred while deleting iproducts.");
             }
         });
     });
@@ -193,5 +183,6 @@ setTimeout(function() {
 </script>
 
 @endpush
+
 @endif
 

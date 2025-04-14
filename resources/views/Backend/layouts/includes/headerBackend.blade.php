@@ -67,7 +67,7 @@
         </ul>
       </li>
 
-   
+
 
       <!-- Categories Section -->
       <li>
@@ -82,6 +82,19 @@
           <li><a href="#" class="nav-link">Kids & Baby</a></li>
           <li><a href="#" class="nav-link">Accessories</a></li>
           <li><a href="#" class="nav-link">Seasonal Collections</a></li>
+        </ul>
+      </li>
+
+    <!-- Product Image Section -->
+      <li>
+        <a href="#productImageSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
+            <i class="fa-solid fa-image"></i>
+          <span>Product Image</span>
+          <i class="fas fa-angle-down arrow"></i>
+        </a>
+        <ul class="submenu collapse" id="productImageSubmenu">
+          <li><a href="{{Route('productimage.index')}}" class="nav-link">Product Image List</a></li>
+          <li><a href="{{Route('productimage.create')}}" class="nav-link">Add Product Image</a></li>
         </ul>
       </li>
 

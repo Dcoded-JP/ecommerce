@@ -10,4 +10,11 @@ class Color extends Model
     protected $fillable = [
         'color_name'
     ];
+
+
+
+    public function iProducts()
+    {
+        return $this->belongsTo(IProduct::class);
+    }
 }

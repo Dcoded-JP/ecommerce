@@ -30,11 +30,11 @@ class ColorController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $validatedColor = $request->validate([
             'color_name'=> 'required|unique:colors|max:255',
         ]);
-       
+
         Color::create($validatedColor);
         return Redirect::route('color.index')->with('success', 'Color Created Successfully');
 

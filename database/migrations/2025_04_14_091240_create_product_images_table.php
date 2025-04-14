@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
             $table->string('product_img');
+$table->unsignedBigInteger('iproduct_id')->nullable();
+            $table->foreign('iproduct_id')
+                  ->references('id')
+                  ->on('i_products')
+                  ->onDelete('cascade');
             $table->timestamps();
         });
     }

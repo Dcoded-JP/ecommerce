@@ -13,9 +13,9 @@ class SiteController extends Controller
 {
     public function index()
     {
-        if (!Session::has('user_id')) {
-            return redirect()->route('signup');
-        }
+        // if (!Session::has('user_id')) {
+        //     return redirect()->route('signup');
+        // }
         return view('index');
     }
 
@@ -28,7 +28,7 @@ class SiteController extends Controller
     {
         return view('login');
     }
-    
+
     public function saveSignup(Request $request)
     {
         $user = User::where('email', $request->email)->first();
@@ -85,7 +85,7 @@ class SiteController extends Controller
         $products = Product::all();
         // Get unique categories for the filter
         $categories = Product::select('category')->distinct()->get();
-        
+
         return view('product', compact('products', 'categories'));
     }
 
