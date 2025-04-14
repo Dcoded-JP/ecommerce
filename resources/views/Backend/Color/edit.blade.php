@@ -51,7 +51,7 @@ Edit Color
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Update Color</button>
-                                       <button type="reset"  class="btn btn-dark">Clear</button>
+                                     
                                     </div>
                                 </div>
                             </div>

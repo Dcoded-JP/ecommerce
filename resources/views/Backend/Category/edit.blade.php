@@ -46,15 +46,14 @@ Edit Category
 
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-4">
-                                    <div class="mb-3">
+                                    <div class="mb-3 mt-4">
                                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Update Category</button>
-                                       <button type="reset"  class="btn btn-dark">Clear</button>
+                                      
                                     </div>
                                 </div>
                             </div>
+                           
                         </form>
                     </div>
                 </div>

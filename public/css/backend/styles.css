@@ -108,7 +108,27 @@ body {
   transition: all var(--transition-speed) var(--transition-timing);
   z-index: var(--z-index-sidebar);
   box-shadow: var(--shadow-lg);
+  overflow-y: auto; /* Enable vertical scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--secondary-color) transparent; /* Firefox */
 }
+
+/* Add custom scrollbar styles for webkit browsers */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--secondary-color);
+  border-radius: 20px;
+  border: transparent;
+}
+
 
 .sidebar.show {
   left: 0;
@@ -141,6 +161,8 @@ body {
 .sidebar-menu {
   padding: 0;
   list-style: none;
+  height: calc(100vh - var(--header-height)); /* Adjust height to account for header */
+  /* overflow-y: auto; */
 }
 
 .sidebar .nav-link {

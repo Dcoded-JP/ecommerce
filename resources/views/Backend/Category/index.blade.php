@@ -1,7 +1,7 @@
 @extends('Backend.layouts.backend')
 
 @section('title')
-Index Category
+Category
 @endsection
 
 
@@ -9,40 +9,60 @@ Index Category
  <!-- Main Content -->
  <div class="content">
     <div class="container-fluid">
-        <div class="row">
-
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                      <a href="{{Route('category.create')}}" class="btn btn-success">
-                        <span title="Add Category">
-                            <i class="fa-solid fa-plus"></i> Category
-                           </span>
-                      </a>
-                      <button id="deleteSelected" class="btn btn-dark"><i class="fa-solid fa-trash"></i> Delete Selected</button>
-
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row mt-4">
             <div class="col-md-12">
-              <div class="card">
+              <div class="card shadow">
                 <div class="card-header">
-                  <i class="fas fa-shopping-cart me-2"></i>
-                  Category List
+                   
+                    <h3><i class="fas fa-shopping-cart me-2"></i> Category List</h3>
+                
+
+
+                    <form action="{{Route('category.store')}}" class="form" method="POST">
+                        @csrf
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <div class="form-group">
+                                        <input type="text" name="category_name" placeholder="Enter Category Name" class="form-control bg-light" value="{{old('category_name')}}" required>
+                                        @error('category_name')
+                                        <div class="text-danger">{{$message}}</div>
+                                        @enderror
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                               <div class="mb-3">
+                                <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Add Category</button>
+                               </div>
+                            </div>
+                            <div class="col-md-4" style="margin-left: auto" style="display:inline-block">
+                                <select id="actions" class="form-select" >
+                                    <option value="" class="bg-light text-muted">Bulk Actions</option>
+                                    <option value="" class="bg-light text-muted">-----------------</option>
+                                    <option value="export">Export</option>
+                                    <option value="archive">Archive</option>
+                                    <option value="delete">Delete</option>
+                                    <option value="">Another</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+
+
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table table-bordered table-striped display" id="categoryTable" >
                       <thead>
                         <tr>
-                            <th><input type="checkbox" class="form-check-input" id="selectAll"></th>
-                            <th>Category ID</th>
-                            <th>Name</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
-                            <th>Actions</th>
+                            <th style="max-width: 50px ;font-family:cursive"><input type="checkbox" class="form-check-input" id="selectAll"></th>
+                            <th style="max-width: 50px ;font-family:cursive">ID</th>
+                            <th style="font-family:cursive">Name</th>
+                            <th style="max-width: 200px ;font-family:cursive">Created At</th>
+                            <th style="max-width: 200px ;font-family:cursive">Updated At</th>
+                            <th style="max-width: 200px ;font-family:cursive">Actions</th>
                         </tr>
                       </thead>
                      @if($category)
@@ -51,17 +71,17 @@ Index Category
                         <tr>
                             <td><input type="checkbox" class="category-check form-check-input" value="{{$ct->id}}"></td>
                             <td>{{$ct->id}}</td>
-                            <td>{{$ct->category_name}}</td>
+                            <td><a href="{{Route('category.show', $ct->id)}}" class="btn btn-outline-info" title="Show">{{$ct->category_name}}</a></td>
                             <td>{{$ct->created_at}}</td>
                             <td>{{$ct->updated_at}}</td>
                             <td>
-                                <a href="{{Route('category.show', $ct->id)}}" class="btn btn-light" title="Show"><i class="fa-solid fa-eye"></i></a>
-                                <a href="{{Route('category.edit', $ct->id)}}" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
+                                
+                                <a href="{{Route('category.edit', $ct->id)}}" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
 
                                 <form action="{{Route('category.destroy', $ct->id)}}" method="POST" style="display: inline-block">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to delete this?')"><i class="fa-solid fa-trash" title="Delete" ></i></button>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this?')"><i class="fa-solid fa-trash" title="Delete" ></i></button>
                                 </form>
 
 
@@ -70,10 +90,6 @@ Index Category
                         </tr>
                        @endforeach
                       </tbody>
-                     @else
-                     <tbody>
-                        No Category
-                     </tbody>
                      @endif
                     </table>
                   </div>
@@ -88,100 +104,102 @@ Index Category
 
 @endsection
 
-
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#categoryTable').DataTable();
-    });
+        // DataTable initialization
+        var table = $('#categoryTable').DataTable();
 
-
-    $(document).ready(function() {
-    var table = $('#categoryTable').DataTable();
-
-    // Select All Checkbox
-    $('#selectAll').on('click', function() {
-        $('.category-check').prop('checked', this.checked);
-    });
-
-    // If any individual checkbox is unchecked, uncheck "Select All" checkbox
-    $(document).on('change', '.category-check', function() {
-        if (!$(this).prop("checked")) {
-            $('#selectAll').prop("checked", false);
-        }
-    });
-
-
-
-    // Mass Delete Functionality
-    $('#deleteSelected').on('click', function() {
-        var selectedIds = [];
-
-        $('.category-check:checked').each(function() {
-            selectedIds.push($(this).val());
+        // Select All Checkbox
+        $('#selectAll').on('click', function() {
+            $('.category-check').prop('checked', this.checked);
         });
 
-        if (selectedIds.length === 0) {
-            alert("Please select at least one Category to delete.");
-            return;
-        }
-
-        if (!confirm("Are you sure you want to delete the selected Categories?")) {
-            return;
-        }
-
-        $.ajax({
-            url: "{{ route('category.massDelete') }}",
-            type: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                ids: selectedIds
-            },
-            success: function(response) {
-                   // Display SweetAlert for success message
-    Swal.fire({
-    title: 'Success!',
-    text: response.message,
-    icon: 'success',
-    confirmButtonText: 'OK'
-});
-// Delay execution by 2 seconds (2000 milliseconds)
-setTimeout(function() {
-    location.reload();
-}, 2000);
-
-
-
-            },
-            error: function(xhr) {
-                alert("An error occurred while deleting Categories.");
+        // If any individual checkbox is unchecked, uncheck "Select All" checkbox
+        $(document).on('change', '.category-check', function() {
+            if (!$(this).prop("checked")) {
+                $('#selectAll').prop("checked", false);
             }
         });
+
+        // Handle bulk actions
+        $('#actions').on('change', function() {
+            var selectedAction = $(this).val();
+            
+            if (selectedAction === 'delete') {
+                var selectedIds = [];
+
+                $('.category-check:checked').each(function() {
+                    selectedIds.push($(this).val());
+                });
+
+                if (selectedIds.length === 0) {
+                    Swal.fire({
+                        title: 'Warning!',
+                        text: 'Please select at least one Category to delete.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    $(this).val(''); // Reset select
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to delete the selected Categories?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('category.massDelete') }}",
+                            type: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                ids: selectedIds
+                            },
+                            success: function(response) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 2000);
+                            },
+                            error: function(xhr) {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'An error occurred while deleting Categories.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
+                    }
+                    $('#actions').val(''); // Reset select
+                });
+            }
+            // Add more conditions here for other actions (export, archive, etc.)
+        });
     });
-
-
-
-
-    });
-
-
-
-  </script>
+</script>
 @endpush
 
 @if(Session::has('success'))
 @push('js')
-
 <script>
-    // Display SweetAlert for success message
     Swal.fire({
-    title: 'Success!',
-    text: '{{ Session::get('success') }}',
-    icon: 'success',
-    confirmButtonText: 'OK'
-});
+        title: 'Success!',
+        text: '{{ Session::get('success') }}',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
 </script>
-
 @endpush
 @endif
-

@@ -35,8 +35,8 @@
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <a href="#" class="sidebar-brand">
-        <img src="https://via.placeholder.com/30" alt="Logo">
-        FashionAdmin
+        <img src="{{asset('images/backend/john.jpg')}}" alt="Logo">
+        Admin Crafto
       </a>
       <button class="sidebar-close" id="sidebarClose">
         <i class="fas fa-times"></i>
@@ -68,62 +68,6 @@
       </li>
 
 
-
-      <!-- Categories Section -->
-      <li>
-        <a href="#categoriesSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
-          <i class="fas fa-list-alt"></i>
-          <span>Categories</span>
-          <i class="fas fa-angle-down arrow"></i>
-        </a>
-        <ul class="submenu collapse" id="categoriesSubmenu">
-          <li><a href="{{Route('category.index')}}" class="nav-link">Catagory List</a></li>
-          <li><a href="{{Route('category.create')}}" class="nav-link">Add Category</a></li>
-          <li><a href="#" class="nav-link">Kids & Baby</a></li>
-          <li><a href="#" class="nav-link">Accessories</a></li>
-          <li><a href="#" class="nav-link">Seasonal Collections</a></li>
-        </ul>
-      </li>
-
-    <!-- Product Image Section -->
-      <li>
-        <a href="#productImageSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
-            <i class="fa-solid fa-image"></i>
-          <span>Product Image</span>
-          <i class="fas fa-angle-down arrow"></i>
-        </a>
-        <ul class="submenu collapse" id="productImageSubmenu">
-          <li><a href="{{Route('productimage.index')}}" class="nav-link">Product Image List</a></li>
-          <li><a href="{{Route('productimage.create')}}" class="nav-link">Add Product Image</a></li>
-        </ul>
-      </li>
-
-       <!-- Color Section -->
-       <li>
-        <a href="#colorsSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
-          <i class="fa-solid fa-paintbrush"></i>
-          <span>Colors</span>
-          <i class="fas fa-angle-down arrow"></i>
-        </a>
-        <ul class="submenu collapse" id="colorsSubmenu">
-          <li><a href="{{Route('color.index')}}" class="nav-link">Colors List</a></li>
-          <li><a href="{{Route('color.create')}}" class="nav-link">Add Color</a></li>
-        </ul>
-      </li>
-
-      {{-- <i class="fa-solid fa-ruler"></i> --}}
-             <!-- size Section -->
-             <li>
-              <a href="#sizesSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
-                <i class="fa-solid fa-ruler"></i>
-                <span>Size</span>
-                <i class="fas fa-angle-down arrow"></i>
-              </a>
-              <ul class="submenu collapse" id="sizesSubmenu">
-                <li><a href="{{Route('size.index')}}" class="nav-link">Size List</a></li>
-                <li><a href="{{Route('size.create')}}" class="nav-link">Add Size</a></li>
-              </ul>
-            </li>
       <!-- Orders Section -->
       <li>
         <a href="#ordersSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
@@ -172,6 +116,23 @@
         </a>
       </li>
 
+
+   
+      <!-- Master Section -->
+      <li>
+        <a href="#masterSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
+          <i class="fa-solid fa-server"></i>
+          <span>Master</span>
+          <i class="fas fa-angle-down arrow"></i>
+        </a>
+        <ul class="submenu collapse" id="masterSubmenu">
+          <li><a href="{{Route('category.index')}}" class="nav-link">Category</a></li>
+          <li><a href="{{Route('color.index')}}" class="nav-link">Color</a></li>
+          <li><a href="{{Route('size.index')}}" class="nav-link">Size</a></li>
+        </ul>
+      </li>
+
+
       <!-- Settings Section -->
       <li>
         <a href="#settingsSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">
@@ -206,7 +167,7 @@
       </div>
 
       <div class="user-profile">
-        <img src="https://via.placeholder.com/35" alt="User" class="user-avatar">
+        <img src="{{asset('images/backend/roman-face.jpg')}}" alt="User" class="user-avatar">
         <span>Admin</span>
         <i class="fas fa-angle-down" style="font-size: 0.9rem;"></i>
       </div>
