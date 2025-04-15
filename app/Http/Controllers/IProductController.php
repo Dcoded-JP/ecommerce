@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\IProduct;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\IProductColor;
+use App\Models\IProductSize;
 use App\Models\Size;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +29,7 @@ class IProductController extends Controller
         'size_id.*' => 'exists:sizes,id',
     ];
     private const IMG_RULES = [
-        'product_img.*' => 'required|image|mimes:jpeg,png,jpg|max:5120|dimensions:max_width=4920,max_height=4080',
+        'product_img.*' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120|dimensions:max_width=4920,max_height=4080',
     ];
 
     public function index()
@@ -65,6 +67,20 @@ class IProductController extends Controller
         try {
             // Store iproduct
             $ipro = IProduct::create($validatedData);
+
+            foreach($request->color_id as $color){
+                IProductColor::create([
+                    'i_product_id' => $ipro->id,
+                    'color_id' => $color,
+                ]);
+            }
+
+            foreach($request->size_id as $size){
+                IProductSize::create([
+                    'i_product_id' => $ipro->id,
+                    'size_id' => $size,
+                ]);
+            }
 
             // Store images
             if($request->has('product_img') && $request->input('have_img') == "1"){

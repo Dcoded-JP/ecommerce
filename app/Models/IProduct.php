@@ -36,16 +36,10 @@ class IProduct extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function colors()
+    public function color()
     {
-        return Color::whereIn('id', $this->color_id ?? []);
+        return $this->belongsTo(Color::class);
     }
-
-    public function sizes()
-    {
-        return Size::whereIn('id', $this->size_id ?? []);
-    }
-
 
     public function getColorsCollectionAttribute()
     {
@@ -72,4 +66,15 @@ class IProduct extends Model
         }
         return Size::whereIn('id', $this->size_id)->get();
     }
+
+    public function colors()
+    {
+        return $this->hasMany(IProductColor::class);
+    }
+
+    public function sizes()
+    {
+        return $this->hasMany(IProductSize::class);
+    }
+    
 }

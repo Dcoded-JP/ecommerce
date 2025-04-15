@@ -84,7 +84,7 @@ class SiteController extends Controller
 
     public function product()
     {
-        $products = IProduct::with(['category', 'color', 'size', 'productImages'])->get();
+        $products = IProduct::with(['category', 'color', 'productImages'])->get();
         // Get unique categories for the filter
         $categories = Category::select('id', 'category_name')->get();
 
@@ -93,7 +93,7 @@ class SiteController extends Controller
 
     public function productDetails($id)
     {
-        $product = IProduct::with(['category', 'color', 'size', 'productImages'])->findOrFail($id);  // This will automatically throw a 404 if product not found
+        $product = IProduct::with(['category', 'color', 'productImages'])->findOrFail($id);  // This will automatically throw a 404 if product not found
         
         if (!$product) {
             return redirect()->route('home')->with('error', 'Product not found');
