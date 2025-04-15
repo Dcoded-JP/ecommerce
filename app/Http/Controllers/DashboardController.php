@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers; 
+namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\IProduct;
 use Illuminate\Support\Facades\Log;
 
 
@@ -15,6 +16,7 @@ class DashboardController extends Controller
     // example dashboard https://phoenix-react.prium.me/pages/demo/vertical-sidenav
     public function dashboardShow()
     {
+        $totalProducts= $this->getTotalProduct();
         $totleCategories = $this->getCategory();
         $monthlySales = $this->getMonthlySales(); // Add method to get monthly sales
         $categoryDistribution = $this->getCategoryDistribution(); // Add method to get category distribution
@@ -22,7 +24,8 @@ class DashboardController extends Controller
         return view('Backend.Dashboard.dashboard', compact(
             'totleCategories',
             'monthlySales',
-            'categoryDistribution'
+            'categoryDistribution',
+            'totalProducts',
         ));
     }
 
@@ -36,7 +39,7 @@ class DashboardController extends Controller
             return "Not Found 'Category Count'";
         }
 
-        
+
     }
 
     private function getMonthlySales()
@@ -57,5 +60,10 @@ class DashboardController extends Controller
             'labels' => ['T-Shirts', 'Jeans', 'Dresses', 'Accessories'],
             'data' => [30, 25, 25, 20]
         ];
+    }
+
+
+    private function getTotalProduct(){
+        return (IProduct::count());
     }
 }

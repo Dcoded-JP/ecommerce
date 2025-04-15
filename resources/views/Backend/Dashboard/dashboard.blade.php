@@ -20,7 +20,7 @@ Dashboard
                   <i class="fas fa-tshirt text-primary fs-4"></i>
                 </div>
                 <div>
-                  <h5 class="mb-0">1,245</h5>
+                  <h5 class="mb-0">{{$totalProducts}}</h5>
                   <small class="text-muted">Total Products</small>
                 </div>
               </div>
@@ -132,7 +132,7 @@ Dashboard
         </div>
       </div>
 
-      
+
 
       <!-- Recent Orders -->
       <div class="row mt-4">
@@ -223,7 +223,7 @@ Dashboard
         }
     }
   });
-  
+
   // Category Distribution Chart
   const categoryCtx = document.getElementById('categoryChart').getContext('2d');
   const categoryChart = new Chart(categoryCtx, {

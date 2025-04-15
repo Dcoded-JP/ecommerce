@@ -211,7 +211,114 @@ Edit I-Product
 
 @push('js')
 <script>
-// ...same JavaScript code as create.blade.php...
+const imageContainer = document.querySelector('.imageContainer');
+const haveImg = document.getElementById('have_img');
+let imageRowCount = 0;
+
+// Hide image container initially
+imageContainer.style.display = 'none';
+
+// Listen for select changes
+haveImg.addEventListener('change', function() {
+    if (this.value === '1') { // Yes selected
+        imageContainer.style.display = 'block';
+        // Add initial row if container is empty
+        if (imageContainer.children.length === 0) {
+            addImageRow();
+            addAddButton();
+        }
+    } else {
+        imageContainer.style.display = 'none';
+        imageContainer.innerHTML = ''; // Clear container
+        imageRowCount = 0;
+    }
+});
+
+function addAddButton() {
+    const buttonRow = document.createElement('div');
+    buttonRow.className = 'row mt-2';
+    buttonRow.innerHTML = `
+        <div class="col-md-12">
+            <button type="button" class="btn btn-outline-primary" id="addImageBtn">
+                <i class="fa-solid fa-plus"></i> Add Image
+            </button>
+        </div>
+    `;
+    imageContainer.appendChild(buttonRow);
+
+    // Add click event for the new button
+    document.getElementById('addImageBtn').addEventListener('click', addImageRow);
+}
+
+function addImageRow() {
+    const row = document.createElement('div');
+    row.className = 'row mt-3 image-row';
+
+    row.innerHTML = `
+        <div class="col-md-6">
+            <div class="">
+                <div class="form-group  p-2">
+                    <label class="mb-1 bold text-capitalize">Product Image</label>
+                    <input type="file" name="product_img[${imageRowCount}]"
+                           class="form-control product-image-input"
+                           accept="image/png, image/jpeg, image/jpg">
+                           @error('product_img[${imageRowCount}]')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
+                                            <button type="button" class="btn btn-danger remove-row">
+                <i class="fa-solid fa-times"></i>
+            </button>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class=" preview-container" style="display: none;">
+                <img src="#"
+                     class="product-preview-image"
+                     style="max-height: 150px;">
+            </div>
+        </div>
+
+    `;
+
+    // Insert new row before the "Add More" button
+    const addButton = document.getElementById('addImageBtn');
+    if (addButton) {
+        addButton.parentElement.parentElement.before(row);
+    } else {
+        imageContainer.appendChild(row);
+    }
+
+    // Add image preview functionality
+    const imageInput = row.querySelector('.product-image-input');
+    const previewContainer = row.querySelector('.preview-container');
+    const previewImage = row.querySelector('.product-preview-image');
+
+    imageInput.addEventListener('change', function(e) {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewContainer.style.display = 'inline-block'; // Show preview
+            }
+            reader.readAsDataURL(file);
+        } else {
+            previewContainer.style.display = 'none'; // Hide preview
+        }
+    });
+
+    // Add remove functionality
+    row.querySelector('.remove-row').addEventListener('click', function() {
+        row.remove();
+        if (imageContainer.querySelectorAll('.image-row').length === 0) {
+            addImageRow();
+        }
+    });
+
+    imageRowCount++;
+}
 </script>
 @endpush
 
