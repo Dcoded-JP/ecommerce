@@ -229,7 +229,7 @@
                                             <div class="shop-overlay bg-gradient-gray-light-dark-transparent"></div>
                                         </a>
                                         <div class="shop-buttons-wrap">
-                                            <a href="{{ route('singleProduct', $product->id) }}"
+                                            <a href="{{ route('productDetails', $product->id) }}"
                                                 class="alt-font btn btn-small btn-box-shadow btn-white btn-round-edge left-icon add-to-cart">
                                                 <i class="feather icon-feather-shopping-bag"></i><span
                                                     class="quick-view-text button-text">Add to cart</span>

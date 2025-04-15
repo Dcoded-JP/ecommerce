@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Session;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Product;
-
+use App\Models\CartItem;
 class SiteController extends Controller
 {
     public function index()
@@ -91,11 +91,80 @@ class SiteController extends Controller
 
     public function productDetails($id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);  // This will automatically throw a 404 if product not found
+        
+        if (!$product) {
+            return redirect()->route('home')->with('error', 'Product not found');
+        }
 
-        $products = Product::all();
-        // Get unique categories for the filter
-        $categories = Product::select('category')->distinct()->get();
-        return view('product_details', compact('product', 'products', 'categories'));
+        return view('product_details', compact('product'));
+    }
+
+    // public function cart()
+    // {
+    //     $products = Product::all();
+    //     return view('cart', compact('products'));
+    // }
+    public function addToCart(Request $request, $id)
+    {
+        if (!Session::has('user_id')) {
+            return redirect()->route('login')->with('error', 'Please login to add items to cart');
+        }
+
+        $product = Product::find($id);
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found');
+        }
+
+        $cartItem = CartItem::create([
+            'user_id' => session('user_id'),
+            'product_id' => $id,
+            'name' => $request->name,  // This will now receive the product name
+            'color' => $request->color,
+            'size' => $request->size,
+            'quantity' => $request->quantity ?? 1
+        ]);
+        
+        return redirect()->route('cart')->with('success', 'Product added to cart successfully');
+    }
+
+    public function cart()
+    {
+        if (!Session::has('user_id')) {
+            return redirect()->route('login')->with('error', 'Please login to view cart');
+        }
+
+        $cartItems = CartItem::where('user_id', session('user_id'))
+                            ->with('product')
+                            ->get();
+
+        return view('cart', compact('cartItems'));
+    }
+
+    public function removeFromCart($id)
+    {
+        if (!Session::has('user_id')) {
+            return redirect()->route('login');
+        }
+
+        $cartItem = CartItem::where('id', $id)
+                           ->where('user_id', session('user_id'))
+                           ->first();
+
+        if ($cartItem) {
+            $cartItem->delete();
+        }
+
+        return redirect()->route('cart');
+    }
+
+    public function emptyCart()
+    {
+        if (!Session::has('user_id')) {
+            return redirect()->route('login');
+        }
+
+        CartItem::where('user_id', session('user_id'))->delete();
+        return redirect()->route('cart');
     }
 }
