@@ -16,7 +16,7 @@ Index I-Product
                     <div class="card-header">
                       <a href="{{Route('iproduct.create')}}" class="btn btn-success">
                         <span title="Add I-Product">
-                            <i class="fa-solid fa-plus"></i> I-Product
+                            <i class="fa-solid fa-plus"></i> Add iProduct
                            </span>
                       </a>
                       <button id="deleteSelected" class="btn btn-dark"><i class="fa-solid fa-trash"></i> Delete Selected</button>
@@ -29,17 +29,27 @@ Index I-Product
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                    
-                  I-Product List
+
+                  iProduct List
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table table-bordered table-striped display" id="iproductTable" >
                       <thead>
+                        {{--  $category=Category::select('id','category_name')->get();
+        $color=Color::select('id','color_name')->get();
+        $size=Size::select('id','size_name')->get();
+        $iproduct=IProduct::select('id','product_name','sku','price','category_id','color_id','size_id')->get();
+       return view('Backend.IProduct.index',compact('iproduct','category','color',,'size_id','created_at',"updated_at")->get();--}}
                         <tr>
                             <th><input type="checkbox" class="form-check-input" id="selectAll"></th>
-                            <th>I-Product ID</th>
+                            <th>ID</th>
                             <th>Name</th>
+                            <th>SKU</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Size</th>
+                            <th>Color</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Actions</th>
@@ -47,18 +57,28 @@ Index I-Product
                       </thead>
                      @if($iproduct)
                      <tbody>
-                       @foreach($iproduct as $cl)
+                       @foreach($iproduct as $ipr)
                         <tr>
-                            <td><input type="checkbox" class="iproduct-check form-check-input" value="{{$cl->id}}"></td>
-                            <td>{{$cl->id}}</td>
-                            <td>{{$cl->iproduct_name}}</td>
-                            <td>{{$cl->created_at}}</td>
-                            <td>{{$cl->updated_at}}</td>
-                            <td>
-                                <a href="{{Route('iproduct.show', $cl->id)}}" class="btn btn-light" title="Show"><i class="fa-solid fa-eye"></i></a>
-                                <a href="{{Route('iproduct.edit', $cl->id)}}" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
+                            <td><input type="checkbox" class="iproduct-check form-check-input" value="{{$ipr->id}}"></td>
+                            <td>{{$ipr->id}}</td>
+                            <td>{{$ipr->product_name}}</td>
+                            <td>{{$ipr->sku}}</td>
 
-                                <form action="{{Route('iproduct.destroy', $cl->id)}}" method="POST" style="display: inline-block">
+                            <td>₹ {{$ipr->price}}</td>
+
+                            <td>{{ $ipr->category->category_name ?? 'N/A' }}</td>
+                            <td>{{ $ipr->size->size_name ?? 'N/A' }}</td>
+                            <td>{{ $ipr->color->color_name ?? 'N/A' }}</td>
+
+
+
+                            <td>{{$ipr->created_at}}</td>
+                            <td>{{$ipr->updated_at}}</td>
+                            <td>
+                                <a href="{{Route('iproduct.show', $ipr->id)}}" class="btn btn-light" title="Show"><i class="fa-solid fa-eye"></i></a>
+                                <a href="{{Route('iproduct.edit', $ipr->id)}}" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
+
+                                <form action="{{Route('iproduct.destroy', $ipr->id)}}" method="POST" style="display: inline-block">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to delete this?')"><i class="fa-solid fa-trash" title="Delete" ></i></button>

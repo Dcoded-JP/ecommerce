@@ -59,9 +59,8 @@
           <i class="fas fa-angle-down arrow"></i>
         </a>
         <ul class="submenu collapse show" id="productsSubmenu">
-          <li><a href="#" class="nav-link">All Products</a></li>
-          <li><a href="#" class="nav-link">Add New Product</a></li>
-          <li><a href="#" class="nav-link">Categories</a></li>
+          <li><a href="{{Route('iproduct.index')}}" class="nav-link">All Products</a></li>
+          <li><a href="{{Route('iproduct.create')}}" class="nav-link">Add New Product</a></li>
           <li><a href="#" class="nav-link">Tags & Attributes</a></li>
           <li><a href="#" class="nav-link">Inventory</a></li>
         </ul>
@@ -117,7 +116,7 @@
       </li>
 
 
-   
+
       <!-- Master Section -->
       <li>
         <a href="#masterSubmenu" class="nav-link collapsed" data-bs-toggle="collapse">

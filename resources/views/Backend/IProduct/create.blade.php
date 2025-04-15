@@ -13,7 +13,7 @@ Create I-Product
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                      <a href="{{Route('iproduct.index')}}" class="btn btn-primary"><i class="fa-solid fa-list"></i> I-Product List</a>
+                      <a href="{{Route('iproduct.index')}}" class="btn btn-primary"><i class="fa-solid fa-list"></i> iProduct List</a>
 
                     </div>
                 </div>
@@ -23,7 +23,7 @@ Create I-Product
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3> Add I-Product</h3>
+                        <h3> Add <i>iProduct</i></h3>
                     </div>
                     <div class="card-body">
                         <form action="{{Route('iproduct.store')}}"  class="form" method="POST" enctype="multipart/form-data" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
@@ -168,19 +168,21 @@ Create I-Product
                                     </div>
                                 </div>
                             </div>
-                            <div class="row imageContainer">
 
-                            </div>
+                                <div class="imageContainer card p-4 shadow">
+
+                                </div>
+
 
 
 
                             <div class="row">
-                                <div class="col-md-4">
+
                                     <div class="mb-3">
                                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Add I-Product</button>
                                        <button type="reset"  class="btn btn-dark">Clear</button>
                                     </div>
-                                </div>
+
                             </div>
                         </form>
                     </div>
@@ -221,11 +223,11 @@ haveImg.addEventListener('change', function() {
 
 function addAddButton() {
     const buttonRow = document.createElement('div');
-    buttonRow.className = 'row mt-3';
+    buttonRow.className = 'row mt-2';
     buttonRow.innerHTML = `
         <div class="col-md-12">
-            <button type="button" class="btn btn-primary" id="addImageBtn">
-                <i class="fa-solid fa-plus"></i> Add More Images
+            <button type="button" class="btn btn-outline-primary" id="addImageBtn">
+                <i class="fa-solid fa-plus"></i> Add Image
             </button>
         </div>
     `;
@@ -238,32 +240,33 @@ function addAddButton() {
 function addImageRow() {
     const row = document.createElement('div');
     row.className = 'row mt-3 image-row';
+
     row.innerHTML = `
-        <div class="col-md-4">
-            <div class="mb-3">
-                <div class="form-group">
-                    <label class="mb-1 bold text-capitalize">Product Image ${imageRowCount + 1}</label>
+        <div class="col-md-6">
+            <div class="">
+                <div class="form-group  p-2">
+                    <label class="mb-1 bold text-capitalize">Product Image</label>
                     <input type="file" name="product_img[${imageRowCount}]"
                            class="form-control product-image-input"
                            accept="image/png, image/jpeg, image/jpg">
-                    <div class="form-text small">
-                        <i>Accepts (png, jpeg, jpg) <br> Max size: 5MB, Dimensions: 2920x2080 pixels</i>
-                    </div>
+                           @error('product_img[${imageRowCount}]')
+                            <div class="text-danger">{{$message}}</div>
+                        @enderror
+                                            <button type="button" class="btn btn-danger remove-row">
+                <i class="fa-solid fa-times"></i>
+            </button>
                 </div>
+
             </div>
         </div>
-        <div class="col-md-7">
-            <div class="mb-3 preview-container" style="display: none;">
-                <img src="{{ asset('backend/assets/images/placeholder.png') }}"
+        <div class="col-md-6">
+            <div class=" preview-container" style="display: none;">
+                <img src="#"
                      class="product-preview-image"
                      style="max-height: 150px;">
             </div>
         </div>
-        <div class="col-md-1">
-            <button type="button" class="btn btn-danger remove-row">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        </div>
+
     `;
 
     // Insert new row before the "Add More" button
@@ -285,11 +288,10 @@ function addImageRow() {
             const reader = new FileReader();
             reader.onload = function(e) {
                 previewImage.src = e.target.result;
-                previewContainer.style.display = 'block'; // Show preview
+                previewContainer.style.display = 'inline-block'; // Show preview
             }
             reader.readAsDataURL(file);
         } else {
-            previewImage.src = "{{ asset('backend/assets/images/placeholder.png') }}";
             previewContainer.style.display = 'none'; // Hide preview
         }
     });
@@ -315,13 +317,8 @@ function addImageRow() {
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
-    border: 2px dashed var(--border-color);
-    padding: 5px;
-}
-
-.product-preview-image:hover {
-    transform: scale(1.02);
-    box-shadow: var(--shadow-md);
+    border: 2px solid var(--border-color);
+    padding: 1px;
 }
 
 .remove-row {

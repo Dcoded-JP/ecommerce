@@ -17,21 +17,26 @@ class IProduct extends Model
         'size_id',
     ];
 
-    public function categories(){
-        return $this->hasOne(Category::class);
-    }
-
-    public function colors(){
-        return $this->hasOne(Color::class);
-    }
-
-    public function sizes(){
-        return $this->hasOne(Size::class);
-    }
+    // Add this if timestamps are not being set automatically
+    public $timestamps = true;
 
     public function productImages()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasMany(ProductImage::class, 'i_product_id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function color()
+    {
+        return $this->belongsTo(Color::class, 'color_id');
+    }
+
+    public function size()
+    {
+        return $this->belongsTo(Size::class, 'size_id');
+    }
 }
