@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\IProductColor;
+use App\Models\IProductSize;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -94,7 +96,7 @@ class SiteController extends Controller
     public function productDetails($id)
     {
         $product = IProduct::with(['category', 'color', 'productImages'])->findOrFail($id);  // This will automatically throw a 404 if product not found
-        
+
         if (!$product) {
             return redirect()->route('home')->with('error', 'Product not found');
         }
@@ -118,15 +120,16 @@ class SiteController extends Controller
             return redirect()->back()->with('error', 'Product not found');
         }
 
+
         $cartItem = CartItem::create([
             'user_id' => session('user_id'),
             'product_id' => $id,
             'name' => $product->product_name,
-            'color' => $product->color ? $product->color->color_name : null,
-            'size' => $product->size ? $product->size->size_name : null,
+            'color' => $request->color,
+            'size' => $request->size,
             'quantity' => $request->quantity ?? 1
         ]);
-        
+
         return redirect()->route('cart')->with('success', 'Product added to cart successfully');
     }
 
@@ -137,16 +140,16 @@ class SiteController extends Controller
         }
 
         $cartItems = CartItem::where('user_id', session('user_id'))
-                            ->get();
+            ->get();
 
         // Get all product IDs from cart
         $productIds = $cartItems->pluck('product_id')->toArray();
-        
+
         // Fetch product details for all products in cart
-        $products = IProduct::with(['category', 'color', 'size', 'productImages'])
-                           ->whereIn('id', $productIds)
-                           ->get()
-                           ->keyBy('id'); // index by product ID for easy lookup
+        $products = IProduct::with(['category', 'colors', 'sizes', 'productImages'])
+            ->whereIn('id', $productIds)
+            ->get()
+            ->keyBy('id'); // index by product ID for easy lookup
 
         return view('cart', compact('cartItems', 'products'));
     }
@@ -158,8 +161,8 @@ class SiteController extends Controller
         }
 
         $cartItem = CartItem::where('id', $id)
-                           ->where('user_id', session('user_id'))
-                           ->first();
+            ->where('user_id', session('user_id'))
+            ->first();
 
         if ($cartItem) {
             $cartItem->delete();

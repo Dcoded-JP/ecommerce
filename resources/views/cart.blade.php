@@ -70,7 +70,7 @@
                                         <span class="fs-14">Size: {{ $item->size }}</span>
                                     </td>
                                     <td class="product-price" data-title="Price">
-                                    ₹{{ isset($products[$item->product_id]) ? $products[$item->product_id]->price : 'N/A' }}
+                                    ₹{{ isset($products[$item->product_id]) ? $products[$item->product_id]?->price : 'N/A' }}
                                     </td>
                                     <td class="product-quantity" data-title="Quantity">
                                         <div class="quantity">
@@ -433,7 +433,7 @@
                             <tr class="total-amount">
                                 <th class="fw-600 text-dark-gray alt-font pb-0">Total</th>
                                 <td class="pb-0" data-title="Total">
-                                <h6 class="d-block fw-700 mb-0 text-dark-gray alt-font">₹ <span id="final-total">{{ $cartItems->sum(function($item) { return $item->product->price * $item->quantity; }) }}</span></h6>
+                                <h6 class="d-block fw-700 mb-0 text-dark-gray alt-font">₹ <span id="final-total">{{ $cartItems->sum(function($item) { return $item->product?->price * $item->quantity; }) }}</span></h6>
                                     <span class="fs-14">(Includes ₹19.29 tax)</span>
                                 </td>
                             </tr>
