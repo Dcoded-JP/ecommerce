@@ -33,6 +33,18 @@ Create I-Product
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <div class="form-group">
+                                            <label for="sku" class="mb-1 bold text-capitalize">SKU</label>
+                                            <input type="text" name="sku" id="sku" placeholder="Enter SKU" class="form-control" required value="{{old('sku')}}">
+                                            @error('sku')
+                                            <div class="text-danger">{{$message}}</div>
+                                            @enderror
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div class="form-group">
                                             <label for="product_name" class="mb-1 bold text-capitalize">Product Name</label>
                                             <input type="text" name="product_name" id="product_name" placeholder="Enter Product Name" class="form-control" required value="{{old('product_name')}}">
                                             @error('product_name')
@@ -54,25 +66,14 @@ Create I-Product
 
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <div class="form-group">
-                                            <label for="sku" class="mb-1 bold text-capitalize">SKU</label>
-                                            <input type="text" name="sku" id="sku" placeholder="Enter SKU" class="form-control" required value="{{old('sku')}}">
-                                            @error('sku')
-                                            <div class="text-danger">{{$message}}</div>
-                                            @enderror
-                                        </div>
 
-                                    </div>
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="mb-3">
                                         <div class="form-group">
                                             <label for="description" class="mb-1 bold text-capitalize">description</label>
-                                            <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter Description" required value="{{old('description')}}"></textarea>
+                                            <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter Description" required >{{old('description')}}</textarea>
                                             @error('description')
                                             <div class="text-danger">{{$message}}</div>
                                             @enderror
@@ -86,7 +87,7 @@ Create I-Product
                                         <div class="form-group">
                                             <label for="price" class="mb-1 bold text-capitalize">price</label>
 
-                                            <input type="number" name="price" id="price" placeholder="Enter Price in Ruppes INR ₹" class="form-control" required value="{{old('price')}}" min=0 max=99999999.99>
+                                            <input type="text" name="price" id="price" placeholder="Enter Price in Ruppes INR ₹" class="form-control" required value="{{old('price')}}">
                                             @error('price')
                                             <div class="text-danger">{{$message}}</div>
                                             @enderror
@@ -116,20 +117,18 @@ Create I-Product
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <div class="form-group">
-                                            <label for="color_id" class="mb-1 bold text-capitalize">Color</label>
-                                            <select name="color_id" id="color_id" class="form-select">
-                                                <option value="">--Select--</option>
+                                            <label for="color_id" class="mb-1 bold text-capitalize">Colors</label>
+                                            <select name="color_id[]" id="color_id" class="form-select select2" multiple>
                                                 @if($color)
-                                                @foreach ($color as $col)
-                                                <option value="{{$col->id}}" {{ old('color_id') == '{!!$col->id!!}' ? 'selected' : '' }}>{{$col->color_name}}</option>
-                                                @endforeach
-
+                                                    @foreach ($color as $col)
+                                                        <option value="{{$col->id}}" {{ (collect(old('color_id'))->contains($col->id)) ? 'selected' : '' }}>
+                                                            {{$col->color_name}}
+                                                        </option>
+                                                    @endforeach
                                                 @endif
-                                                {{-- <option value=""></option>
-                                                --}}
                                             </select>
                                             @error('color_id')
-                                            <div class="text-danger">{{$message}}</div>
+                                                <div class="text-danger">{{$message}}</div>
                                             @enderror
                                         </div>
                                     </div>
@@ -137,20 +136,18 @@ Create I-Product
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <div class="form-group">
-                                            <label for="size_id" class="mb-1 bold text-capitalize">size</label>
-                                            <select name="size_id" id="size_id" class="form-select">
-                                                <option value="">--Select--</option>
+                                            <label for="size_id" class="mb-1 bold text-capitalize">Sizes</label>
+                                            <select name="size_id[]" id="size_id" class="form-select select2" multiple>
                                                 @if($size)
-                                                @foreach ($size as $sz)
-                                                <option value="{{$sz->id}}" {{ old('size_id') == '{!!$sz->id!!}' ? 'selected' : '' }}>{{$sz->size_name}}</option>
-                                                @endforeach
-
+                                                    @foreach ($size as $sz)
+                                                        <option value="{{$sz->id}}" {{ (collect(old('size_id'))->contains($sz->id)) ? 'selected' : '' }}>
+                                                            {{$sz->size_name}}
+                                                        </option>
+                                                    @endforeach
                                                 @endif
-                                                {{-- <option value=""></option>
-                                                --}}
                                             </select>
                                             @error('size_id')
-                                            <div class="text-danger">{{$message}}</div>
+                                                <div class="text-danger">{{$message}}</div>
                                             @enderror
                                         </div>
                                     </div>
@@ -307,10 +304,121 @@ function addImageRow() {
     imageRowCount++;
 }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select options",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
 @endpush
 
 @push('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
+    /* Select2 Container Styling */
+    .select2-container--default .select2-selection--multiple {
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        min-height: 42px;
+        background-color: #fff;
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* Focus State */
+    .select2-container--default.select2-container--focus .select2-selection--multiple {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        outline: 0;
+    }
+
+    /* Selected Items Styling */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background: #0d6efd;
+        border: none;
+        color: white;
+        border-radius: 50px;
+        padding: 4px 12px;
+        margin: 2px 4px;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice:hover {
+        background: #0b5ed7;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    /* Remove Button Styling */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        color: rgba(255,255,255,0.8);
+        margin-right: 6px;
+        padding: 0 4px;
+        border-right: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.2s ease;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+        background: none;
+        color: #fff;
+    }
+
+    /* Dropdown Styling */
+    .select2-dropdown {
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #0d6efd;
+    }
+
+    /* Search Box Styling */
+    .select2-search__field {
+        border: 1px solid #dee2e6 !important;
+        border-radius: 0.25rem !important;
+        padding: 0.375rem 0.75rem !important;
+    }
+
+    .select2-search__field:focus {
+        border-color: #86b7fe !important;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+        outline: 0 !important;
+    }
+
+    /* Placeholder Styling */
+    .select2-container--default .select2-selection--multiple .select2-selection__placeholder {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    /* Disabled State */
+    .select2-container--default.select2-container--disabled .select2-selection--multiple {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    /* Clear All Button */
+    .select2-container--default .select2-selection--multiple .select2-selection__clear {
+        margin-right: 10px;
+        color: #6c757d;
+        font-size: 1.2em;
+        padding: 0 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__clear:hover {
+        color: #dc3545;
+    }
 .product-preview-image {
     max-width: 100%;
     height: auto;

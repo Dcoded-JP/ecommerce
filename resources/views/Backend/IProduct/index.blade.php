@@ -76,17 +76,29 @@ Index I-Product
                             <td>{{$ipr->id}}</td>
                             <td>{{$ipr->product_name}}</td>
                             <td>{{$ipr->sku}}</td>
-
                             <td>₹ {{$ipr->price}}</td>
-
                             <td>{{ $ipr->category->category_name ?? 'N/A' }}</td>
-                            <td>{{ $ipr->size->size_name ?? 'N/A' }}</td>
-                            <td>{{ $ipr->color->color_name ?? 'N/A' }}</td>
-
-
-
-                            <td>{{$ipr->created_at}}</td>
-                            <td>{{$ipr->updated_at}}</td>
+                            <td>
+                                @forelse($ipr->size_details as $size)
+                                    <span class="badge bg-info">
+                                        {{ $size->size_name }}
+                                    </span>
+                                @empty
+                                    <span class="text-muted">N/A</span>
+                                @endforelse
+                            </td>
+                            <td>
+                                @forelse($ipr->color_details as $color)
+                                    <span class="badge bg-primary"
+                                          style="background-color: {{ $color->color_code ?? '#000' }} !important">
+                                        {{ $color->color_name }}
+                                    </span>
+                                @empty
+                                    <span class="text-muted">N/A</span>
+                                @endforelse
+                            </td>
+                            <td>{{ $ipr->created_at ? $ipr->created_at->format('d M Y, h:i A') : 'N/A' }}</td>
+                            <td>{{ $ipr->updated_at ? $ipr->updated_at->format('d M Y, h:i A') : 'N/A' }}</td>
                             <td>
                                 <a href="{{Route('iproduct.show', $ipr->id)}}" class="btn btn-light" title="Show"><i class="fa-solid fa-eye"></i></a>
                                 <a href="{{Route('iproduct.edit', $ipr->id)}}" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
@@ -222,4 +234,45 @@ Index I-Product
 </script>
 @endpush
 @endif
+
+@push('css')
+<style>
+    .badge {
+        margin: 0.2rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+
+    .badge.bg-primary {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .badge.bg-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+    .badge.bg-info {
+        background-color: #0dcaf0;
+        color: #000;
+        box-shadow: 0 2px 4px rgba(13, 202, 240, 0.2);
+    }
+
+    .badge.bg-info:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(13, 202, 240, 0.3);
+    }
+
+    .text-muted {
+        font-style: italic;
+        color: #6c757d;
+    }
+</style>
+@endpush
 

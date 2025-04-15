@@ -21,8 +21,10 @@ class IProductController extends Controller
         'description' => 'required|string',
         'price' => 'required|numeric|min:0',
         'category_id' => 'required|exists:categories,id',
-        'color_id' => 'required|exists:colors,id',
-        'size_id' => 'required|exists:sizes,id',
+        'color_id' => 'required|array',
+        'color_id.*' => 'exists:colors,id',
+        'size_id' => 'required|array',
+        'size_id.*' => 'exists:sizes,id',
     ];
     private const IMG_RULES = [
         'product_img.*' => 'required|image|mimes:jpeg,png,jpg|max:5120|dimensions:max_width=4920,max_height=4080',
@@ -30,7 +32,7 @@ class IProductController extends Controller
 
     public function index()
     {
-        $iproduct = IProduct::with(['category', 'color', 'size'])->get();
+        $iproduct = IProduct::with('category')->get();
         return view('Backend.IProduct.index', compact('iproduct'));
     }
 
@@ -48,41 +50,37 @@ class IProductController extends Controller
      */
     public function store(Request $request)
     {
-        //validate data
-        $v_iproduct=$request->validate(self::IPRODUCT_RULES);
+        // Validate data
+        $validatedData = $request->validate(self::IPRODUCT_RULES);
+
+        // Convert arrays to JSON
+        $validatedData['color_id'] = json_encode($request->color_id);
+        $validatedData['size_id'] = json_encode($request->size_id);
 
         if($request->has('product_img')){
             $request->validate(self::IMG_RULES);
         }
-        //store
+
         DB::beginTransaction();
         try {
-            //store iproduct
-            $ipro=IProduct::create($v_iproduct);
-            //store img
-            if($request->has('product_img') && $request->input('have_img')=="1"){
-                $this->saveProductImg($ipro,$request);
+            // Store iproduct
+            $ipro = IProduct::create($validatedData);
+
+            // Store images
+            if($request->has('product_img') && $request->input('have_img') == "1"){
+                $this->saveProductImg($ipro, $request);
             }
 
             DB::commit();
-
             return redirect()->route('iproduct.index')
                 ->with('success', 'I Product created successfully.');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            return  dd($e->getMessage());
             Log::error('iproduct store error: ' . $e->getMessage());
-
-            // Clean up uploaded file if error occurs
-            // if (isset($v_EmpPersonal['user_img_path'])) {
-            //     Storage::disk('public')->delete($v_EmpPersonal['user_img_path']);
-            // }
-
             return back()
                 ->withInput()
-                ->with('error', 'Error creating employee. Please try again.');
+                ->with('error', 'Error creating product. Please try again.');
         }
-
     }
 
     /**
@@ -90,8 +88,10 @@ class IProductController extends Controller
      */
     public function show($id)
     {
-        $iProduct=IProduct::find($id);
-        $iProduct->load(['category', 'color', 'size', 'productImages']);
+        // Load the product with necessary relationships
+        $iProduct = IProduct::with(['category', 'productImages'])->findOrFail($id);
+
+        // No need to load collections since we're using accessors
         return view('Backend.IProduct.show', compact('iProduct'));
     }
 
@@ -100,11 +100,15 @@ class IProductController extends Controller
      */
     public function edit($id)
     {
-        $iProduct=IProduct::find($id);
+        $iProduct = IProduct::findOrFail($id);
+
+        // Ensure color_id and size_id are arrays
+        $iProduct->color_id = is_array($iProduct->color_id) ? $iProduct->color_id : json_decode($iProduct->color_id, true) ?? [];
+        $iProduct->size_id = is_array($iProduct->size_id) ? $iProduct->size_id : json_decode($iProduct->size_id, true) ?? [];
+
         $category = Category::select('id', 'category_name')->get();
         $color = Color::select('id', 'color_name')->get();
         $size = Size::select('id', 'size_name')->get();
-        $iProduct->load(['category', 'color', 'size', 'productImages']);
 
         return view('Backend.IProduct.edit', compact('iProduct', 'category', 'color', 'size'));
     }
@@ -114,8 +118,9 @@ class IProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $iProduct=IProduct::find($id);
-        // Modify validation rules for update to ignore unique SKU for current product
+        $iProduct = IProduct::find($id);
+
+        // Modify validation rules for update
         $updateRules = array_merge(self::IPRODUCT_RULES, [
             'sku' => 'required|string|unique:i_products,sku,' . $iProduct->id,
         ]);
@@ -123,25 +128,27 @@ class IProductController extends Controller
         // Validate basic product data
         $validatedData = $request->validate($updateRules);
 
+        // Convert arrays to JSON
+        $validatedData['color_id'] = json_encode($request->color_id);
+        $validatedData['size_id'] = json_encode($request->size_id);
+
         DB::beginTransaction();
         try {
             // Update basic product information
             $iProduct->update($validatedData);
 
-            // Handle image updates if new images are provided
+            // Handle image updates
             if ($request->has('product_img') && $request->input('have_img') == "1") {
                 $request->validate(self::IMG_RULES);
                 $this->saveProductImg($iProduct, $request);
             }
 
-            // Handle image deletions if any
+            // Handle image deletions
             if ($request->has('delete_images')) {
                 foreach ($request->input('delete_images') as $imageId) {
                     $image = $iProduct->productImages()->find($imageId);
                     if ($image) {
-                        // Delete the physical file
                         Storage::disk('public')->delete('iproduct_img/' . $image->product_img);
-                        // Delete the record
                         $image->delete();
                     }
                 }

@@ -17,6 +17,12 @@ class IProduct extends Model
         'size_id',
     ];
 
+    protected $casts = [
+        'color_id' => 'array',
+        'size_id' => 'array',
+        'price' => 'decimal:2'
+    ];
+
     // Add this if timestamps are not being set automatically
     public $timestamps = true;
 
@@ -27,16 +33,43 @@ class IProduct extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
-    public function color()
+    public function colors()
     {
-        return $this->belongsTo(Color::class, 'color_id');
+        return Color::whereIn('id', $this->color_id ?? []);
     }
 
-    public function size()
+    public function sizes()
     {
-        return $this->belongsTo(Size::class, 'size_id');
+        return Size::whereIn('id', $this->size_id ?? []);
+    }
+
+
+    public function getColorsCollectionAttribute()
+    {
+        return $this->colors()->get();
+    }
+
+    public function getSizesCollectionAttribute()
+    {
+        return $this->sizes()->get();
+    }
+
+    public function getColorDetailsAttribute()
+    {
+        if (!is_array($this->color_id)) {
+            $this->color_id = json_decode($this->color_id, true) ?? [];
+        }
+        return Color::whereIn('id', $this->color_id)->get();
+    }
+
+    public function getSizeDetailsAttribute()
+    {
+        if (!is_array($this->size_id)) {
+            $this->size_id = json_decode($this->size_id, true) ?? [];
+        }
+        return Size::whereIn('id', $this->size_id)->get();
     }
 }

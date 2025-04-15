@@ -74,12 +74,29 @@ Show I-Product Details
                                     <td>{{ $iProduct->category->category_name ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Color</th>
-                                    <td>{{ $iProduct->color->color_name ?? 'N/A' }}</td>
+                                    <th>Colors</th>
+                                    <td>
+                                        @forelse($iProduct->color_details as $color)
+                                            <span class="badge bg-primary"
+                                                  style="background-color: {{ $color->color_code ?? '#000' }} !important">
+                                                {{ $color->color_name }}
+                                            </span>
+                                        @empty
+                                            <span class="text-muted">No colors assigned</span>
+                                        @endforelse
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th>Size</th>
-                                    <td>{{ $iProduct->size->size_name ?? 'N/A' }}</td>
+                                    <th>Sizes</th>
+                                    <td>
+                                        @forelse($iProduct->size_details as $size)
+                                            <span class="badge bg-info">
+                                                {{ $size->size_name }}
+                                            </span>
+                                        @empty
+                                            <span class="text-muted">No sizes assigned</span>
+                                        @endforelse
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Created At</th>
@@ -107,12 +124,12 @@ Show I-Product Details
                         @if($iProduct->productImages->count() > 0)
                             <div class="row">
                                 @foreach($iProduct->productImages as $image)
-                                    <div class="col-md-11 mb-3" style="margin-left: 5px">
+                                    <div class="col-md-3 mb-3">
                                         <div class="card">
                                             <img src="{{ asset('storage/iproduct_img/' . $image->product_img) }}"
                                                  class="card-img-top"
                                                  alt="Product Image"
-                                                 style="height: auto; width:50vh; object-fit: cover;">
+                                                 style="height: auto;max-width:90vw; object-fit: cover;">
                                             <div class="card-footer text-center">
                                                 <small class="text-muted">
                                                     Added: {{ $image->created_at->diffForHumans() }}
@@ -154,5 +171,29 @@ Show I-Product Details
         transition: transform 0.3s ease;
     }
 
+    /* .card-img-top:hover {
+        transform: scale(1.05);
+    } */
+
+    .badge {
+        margin: 0.2rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .badge:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+    .text-muted {
+        font-style: italic;
+    }
 </style>
 @endpush
