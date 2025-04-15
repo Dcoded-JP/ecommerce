@@ -99,7 +99,7 @@
                             <a href="{{ route('index') }}" class="nav-link">Home</a>
                         </li>
                         <li class="nav-item dropdown submenu">
-                            <a href="{{ route('shop') }}" class="nav-link">Shop</a>
+                            <a href="{{ route('product') }}" class="nav-link">Shop</a>
                             <i class="fa-solid fa-angle-down dropdown-toggle" id="navbarDropdownMenuLink1" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false"></i>
                             <div class="dropdown-menu submenu-content" aria-labelledby="navbarDropdownMenuLink1">
@@ -332,18 +332,7 @@
                             <a href="javascript:void(0);"><i class="feather icon-feather-shopping-bag"></i><span
                                     class="cart-count alt-font text-white bg-dark-gray">2</span></a>
                             <ul class="cart-item-list">
-                                
-                                <li class="cart-item align-items-center">
-                                    <a href="javascript:void(0);" class="alt-font close">×</a>
-                                    <div class="product-image">
-                                        <img class="cart-product-image" src="{{ asset('images/' . $item->product->image) }}" alt="">
-                                    </div>
-                                    <div class="product-detail fw-600">
-                                        <a href="demo-fashion-store-single-product.html">{{ $item->product->name }}</a>
-                                        <span class="item-ammount fw-400">{{ $item->quantity }} x {{ $item->product->price }}</span>
-                                    </div>
-                                </li>
-                                
+                                <!-- Product List Show Here -->
                             </ul>
                         </div>
                         <div class="widget-text icon alt-font">

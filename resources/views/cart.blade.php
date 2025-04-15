@@ -51,20 +51,27 @@
                                         </form>
                                     </td>
                                     <td class="product-thumbnail">
-                                        <a href="{{ route('productDetails', $item->product->id) }}">
-                                            <img class="cart-product-image" src="{{ asset($item->product->image) }}"
-                                                alt="">
+                                        <a href="{{ route('productDetails', $item->product_id) }}">
+                                            @if(isset($products[$item->product_id]) && $products[$item->product_id]->productImages->isNotEmpty())
+                                                <img class="cart-product-image" src="{{ asset('storage/iproduct_img/' . $products[$item->product_id]->productImages->first()->product_img) }}"
+                                                     alt="{{ $item->name }}">
+                                            @else
+                                                <img class="cart-product-image" src="{{ asset('images/placeholder.jpg') }}"
+                                                     alt="{{ $item->name }}">
+                                            @endif
                                         </a>
                                     </td>
                                     <td class="product-name">
-                                        <a href="{{ route('productDetails', $item->product->id) }}"
+                                        <a href="{{ route('productDetails', $item->product_id) }}"
                                             class="text-dark-gray fw-500 d-block lh-initial">
-                                            {{ $item->product->name }}
+                                            {{ $item->name }}
                                         </a>
                                         <span class="fs-14">Color: {{ $item->color }}</span>
                                         <span class="fs-14">Size: {{ $item->size }}</span>
                                     </td>
-                                    <td class="product-price" data-title="Price">₹ {{ $item->product->price }}</td>
+                                    <td class="product-price" data-title="Price">
+                                    ₹{{ isset($products[$item->product_id]) ? $products[$item->product_id]->price : 'N/A' }}
+                                    </td>
                                     <td class="product-quantity" data-title="Quantity">
                                         <div class="quantity">
                                             <button type="button" class="qty-minus">-</button>
@@ -73,8 +80,9 @@
                                             <button type="button" class="qty-plus">+</button>
                                         </div>
                                     </td>
-                                    <td class="product-subtotal" data-title="Total">₹
-                                        {{ $item->product->price * $item->quantity }}</td>
+                                    <td class="product-subtotal" data-title="Total">
+                                        ₹{{ isset($products[$item->product_id]) ? $products[$item->product_id]->price * $item->quantity : 'N/A' }}
+                                    </td>
                                 </tr>
                                 @endforeach
 
@@ -116,7 +124,9 @@
                                 <td class="text-dark-gray fw-600">
                                     <!-- here subtotal will be shown -->
                                     ₹ <span id="cart-total">
-                                        {{ $cartItems->sum(function($item) { return $item->product->price * $item->quantity; }) }}
+                                        {{ $cartItems->sum(function($item) use ($products) { 
+                                            return isset($products[$item->product_id]) ? $products[$item->product_id]->price * $item->quantity : 0; 
+                                        }) }}
                                     </span>
                                 </td>
                             </tr>

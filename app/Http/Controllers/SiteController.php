@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Session;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Product;
+use App\Models\IProduct;
+use App\Models\Category;
 use App\Models\CartItem;
 class SiteController extends Controller
 {
@@ -82,16 +84,16 @@ class SiteController extends Controller
 
     public function product()
     {
-        $products = Product::all();
+        $products = IProduct::with(['category', 'color', 'size', 'productImages'])->get();
         // Get unique categories for the filter
-        $categories = Product::select('category')->distinct()->get();
+        $categories = Category::select('id', 'category_name')->get();
 
         return view('product', compact('products', 'categories'));
     }
 
     public function productDetails($id)
     {
-        $product = Product::findOrFail($id);  // This will automatically throw a 404 if product not found
+        $product = IProduct::with(['category', 'color', 'size', 'productImages'])->findOrFail($id);  // This will automatically throw a 404 if product not found
         
         if (!$product) {
             return redirect()->route('home')->with('error', 'Product not found');
@@ -111,7 +113,7 @@ class SiteController extends Controller
             return redirect()->route('login')->with('error', 'Please login to add items to cart');
         }
 
-        $product = Product::find($id);
+        $product = IProduct::find($id);
         if (!$product) {
             return redirect()->back()->with('error', 'Product not found');
         }
@@ -119,9 +121,9 @@ class SiteController extends Controller
         $cartItem = CartItem::create([
             'user_id' => session('user_id'),
             'product_id' => $id,
-            'name' => $request->name,  // This will now receive the product name
-            'color' => $request->color,
-            'size' => $request->size,
+            'name' => $product->product_name,
+            'color' => $product->color ? $product->color->color_name : null,
+            'size' => $product->size ? $product->size->size_name : null,
             'quantity' => $request->quantity ?? 1
         ]);
         
@@ -135,10 +137,18 @@ class SiteController extends Controller
         }
 
         $cartItems = CartItem::where('user_id', session('user_id'))
-                            ->with('product')
                             ->get();
 
-        return view('cart', compact('cartItems'));
+        // Get all product IDs from cart
+        $productIds = $cartItems->pluck('product_id')->toArray();
+        
+        // Fetch product details for all products in cart
+        $products = IProduct::with(['category', 'color', 'size', 'productImages'])
+                           ->whereIn('id', $productIds)
+                           ->get()
+                           ->keyBy('id'); // index by product ID for easy lookup
+
+        return view('cart', compact('cartItems', 'products'));
     }
 
     public function removeFromCart($id)

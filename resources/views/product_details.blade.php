@@ -30,16 +30,27 @@
                             <div class="swiper-wrapper">
                                 <!-- start slider item -->
                                 @if($product)
-                                    <div class="swiper-slide gallery-box">
-                                        <a href="{{ asset($product->image) }}" data-group="lightbox-gallery"
-                                            title="{{ $product->name }}">
-                                            <img class="w-100" src="{{ asset($product->image) }}" alt="{{ $product->name }}">
-                                        </a>
-                                    </div>
+                                @if($product->productImages->isNotEmpty())
+                                @foreach($product->productImages as $image)
+                                <div class="swiper-slide gallery-box">
+                                    <a href="{{ asset('storage/iproduct_img/' . $image->product_img) }}"
+                                        data-group="lightbox-gallery" title="{{ $product->product_name }}">
+                                        <img class="w-100"
+                                            src="{{ asset('storage/iproduct_img/' . $image->product_img) }}"
+                                            alt="{{ $product->product_name }}">
+                                    </a>
+                                </div>
+                                @endforeach
                                 @else
-                                    <div class="alert alert-danger">
-                                        Product not found
-                                    </div>
+                                <div class="swiper-slide gallery-box">
+                                    <img class="w-100" src="{{ asset('images/placeholder.jpg') }}"
+                                        alt="{{ $product->product_name }}">
+                                </div>
+                                @endif
+                                @else
+                                <div class="alert alert-danger">
+                                    Product not found
+                                </div>
                                 @endif
                                 <!-- end slider item -->
                                 <div class="swiper-slide gallery-box">
@@ -85,18 +96,19 @@
                     <div class="col-12 col-lg-2 order-lg-1 position-relative single-product-thumb">
                         <div class="swiper-container product-image-thumb slider-vertical">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide"><img class="w-100" src="{{ asset($product->image) }}" alt="">
+                                @if($product->productImages->isNotEmpty())
+                                @foreach($product->productImages as $image)
+                                <div class="swiper-slide">
+                                    <img class="w-100" src="{{ asset('storage/iproduct_img/' . $image->product_img) }}"
+                                        alt="{{ $product->product_name }}">
                                 </div>
-                                <div class="swiper-slide"><img class="w-100" src="{{ asset($product->image) }}" alt="">
+                                @endforeach
+                                @else
+                                <div class="swiper-slide">
+                                    <img class="w-100" src="{{ asset('images/placeholder.jpg') }}"
+                                        alt="{{ $product->product_name }}">
                                 </div>
-                                <div class="swiper-slide"><img class="w-100" src="{{ asset($product->image) }}" alt="">
-                                </div>
-                                <div class="swiper-slide"><img class="w-100" src="{{ asset($product->image) }}" alt="">
-                                </div>
-                                <div class="swiper-slide"><img class="w-100" src="{{ asset($product->image) }}" alt="">
-                                </div>
-                                <div class="swiper-slide"><img class="w-100" src="{{ asset($product->image) }}" alt="">
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -104,41 +116,45 @@
             </div>
             <div class="col-12 col-lg-5 product-info">
                 <span class="fw-500 text-dark-gray d-block">{{ $product->sub_title }}</span>
-                <h4 class="alt-font text-dark-gray fw-500 mb-5px">{{ $product->name }}</h4>
+                <h4 class="alt-font text-dark-gray fw-500 mb-5px">{{ $product->product_name }}</h4>
                 <div class="d-block d-sm-flex align-items-center mb-15px">
                     <div><span class="text-dark-gray fw-500">SKU: </span>{{ $product->sku }}</div>
                 </div>
                 <div class="product-price mb-10px">
-                    <span class="text-dark-gray fs-28 xs-fs-24 fw-700 ls-minus-1px">$ {{ $product->price }}</span>
+                    <span class="text-dark-gray fs-28 xs-fs-24 fw-700 ls-minus-1px">₹ {{ $product->price }}</span>
                 </div>
                 <p>{{ $product->description }}</p>
                 <div class="d-flex align-items-center mb-20px">
                     <label class="text-dark-gray alt-font me-15px fw-500">Color</label>
                     <ul class="shop-color mb-0">
-                        @foreach(explode(',', $product->color) as $color)
+                        @if($product->color)
                         <li>
-                            <input class="d-none" type="radio" id="color-{{ $color }}" name="color" checked="">
-                            <label for="color-{{ $color }}"><span style="background-color: {{ $color }}"></span></label>
+                            <input class="d-none" type="radio" id="color-{{ $product->color->color_name }}" name="color"
+                                checked="">
+                            <label for="color-{{ $product->color->color_name }}"><span
+                                    style="background-color: {{ $product->color->color_name }}"></span></label>
                         </li>
-                        @endforeach
+                        @endif
                     </ul>
                 </div>
                 <div class="d-flex align-items-center mb-35px">
                     <label class="text-dark-gray me-15px fw-500">Size</label>
                     <ul class="shop-size mb-0">
-                        @foreach(explode(',', $product->size) as $size)
+                        @if($product->size)
                         <li>
-                            <input class="d-none" type="radio" id="size-{{ $size }}" name="size" checked="">
-                            <label for="size-{{ $size }}"><span>{{ $size }}</span></label>
+                            <input class="d-none" type="radio" id="size-{{ $product->size->size_name }}" name="size"
+                                checked="">
+                            <label
+                                for="size-{{ $product->size->size_name }}"><span>{{ $product->size->size_name }}</span></label>
                         </li>
-                        @endforeach
+                        @endif
                     </ul>
                 </div>
                 <div class="d-flex align-items-center flex-column flex-sm-row mb-20px position-relative">
                     <form action="{{ route('addToCart', $product->id) }}" method="POST"
                         class="d-flex align-items-center flex-column flex-sm-row mb-20px position-relative">
                         @csrf
-                        <input type="hidden" name="name" id="selected_name" value="{{ $product->name }}">
+                        <input type="hidden" name="name" id="selected_name" value="{{ $product->product_name }}">
                         <div class="quantity me-15px xs-mb-15px order-1">
                             <button type="button" class="qty-minus">-</button>
                             <input class="qty-text" type="text" name="quantity" value="1" aria-label="quantity" />
@@ -228,9 +244,10 @@
                 </div>
                 <div>
                     <div class="w-100 d-block"><span class="text-dark-gray alt-font fw-500">Category:</span> <a
-                            href="#">Fashion,</a> <a href="#">Woman</a></div>
-                    <div><span class="text-dark-gray alt-font fw-500">Tags: </span><a href="#">Shirts,</a> <a
-                            href="#">Cotton,</a> <a href="#">Printed</a></div>
+                            href="#">{{ $product->category->category_name ?? 'Uncategorized' }}</a></div>
+                    <div><span class="text-dark-gray alt-font fw-500">Tags: </span><a
+                            href="#">{{ $product->color->color_name ?? '' }},</a> <a
+                            href="#">{{ $product->size->size_name ?? '' }}</a></div>
                 </div>
             </div>
         </div>
