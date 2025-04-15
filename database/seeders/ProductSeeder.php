@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\CartItem;
+use DB;
 use Faker\Core\Color;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,11 +16,15 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        Product::where('id', '>', 0)->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;'); // Disable foreign key checks temporarily
+        Product::truncate();
+        CartItem::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;'); // Re-enable foreign key checks
+        
         $products = [
             [
                 'sub_title' => 'Zalando',
-                'name' => 'Relaxed corduroy shirt',
+                'name' => 'Relaxed corduroy shirt Men',
                 'sku' => 'M492300',
                 'description' => 'Lorem ipsum is simply dummy text of the printing and typesetting industry lorem ipsum standard.',
                 'price' => 49.99,
@@ -29,7 +35,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'sub_title' => 'Zalando',
-                'name' => 'Relaxed corduroy shirt',
+                'name' => 'Relaxed corduroy shirt Women',
                 'sku' => 'M492300',
                 'description' => 'Lorem ipsum is simply dummy text of the printing and typesetting industry lorem ipsum standard.',
                 'price' => 79.99,
@@ -40,7 +46,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'sub_title' => 'Zalando',
-                'name' => 'Relaxed corduroy shirt',
+                'name' => 'Relaxed corduroy shirt Kids',
                 'sku' => 'M492300',
                 'description' => 'Lorem ipsum is simply dummy text of the printing and typesetting industry lorem ipsum standard.',
                 'price' => 29.99,
@@ -51,12 +57,14 @@ class ProductSeeder extends Seeder
             ],
             [
                 'sub_title' => 'Zalando',
-                'name' => 'Relaxed corduroy shirt',
+                'name' => 'Relaxed corduroy shirt Accessories',
                 'sku' => 'M492300',
                 'description' => 'Lorem ipsum is simply dummy text of the printing and typesetting industry lorem ipsum standard.',
                 'price' => 29.99,
                 'category' => 'Accessories',
-                'image' => 'images/demo-fashion-store-product-04.webp'
+                'image' => 'images/demo-fashion-store-product-04.webp',
+                'color' => 'Blue, Green, Red, Yellow, Orange, Purple, Pink, Brown, Black, White',
+                'size' => 'M, L, XL, XXL'
             ]
         ];
 

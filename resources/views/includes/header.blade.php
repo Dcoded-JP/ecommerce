@@ -332,38 +332,18 @@
                             <a href="javascript:void(0);"><i class="feather icon-feather-shopping-bag"></i><span
                                     class="cart-count alt-font text-white bg-dark-gray">2</span></a>
                             <ul class="cart-item-list">
+                                
                                 <li class="cart-item align-items-center">
                                     <a href="javascript:void(0);" class="alt-font close">×</a>
                                     <div class="product-image">
-                                        <a href="demo-fashion-store-single-product.html"><img
-                                                src="https://via.placeholder.com/600x765" class="cart-thumb" alt=""></a>
+                                        <img class="cart-product-image" src="{{ asset('images/' . $item->product->image) }}" alt="">
                                     </div>
                                     <div class="product-detail fw-600">
-                                        <a href="demo-fashion-store-single-product.html">Ribbed tank</a>
-                                        <span class="item-ammount fw-400">1 x $23.00</span>
+                                        <a href="demo-fashion-store-single-product.html">{{ $item->product->name }}</a>
+                                        <span class="item-ammount fw-400">{{ $item->quantity }} x {{ $item->product->price }}</span>
                                     </div>
                                 </li>
-                                <li class="cart-item align-items-center">
-                                    <a href="javascript:void(0);" class="alt-font close">×</a>
-                                    <div class="product-image">
-                                        <a href="demo-fashion-store-single-product.html"><img
-                                                src="https://via.placeholder.com/600x765" class="cart-thumb" alt=""></a>
-                                    </div>
-                                    <div class="product-detail fw-600">
-                                        <a href="demo-fashion-store-single-product.html">Pleated dress</a>
-                                        <span class="item-ammount fw-400">2 x $15.00</span>
-                                    </div>
-                                </li>
-                                <li class="cart-total">
-                                    <div class="fs-18 alt-font mb-15px"><span
-                                            class="w-50 fw-500 text-start">Subtotal:</span><span
-                                            class="w-50 text-end fw-700">$199.99</span></div>
-                                    <a href="demo-fashion-store-cart.html"
-                                        class="btn btn-large btn-transparent-light-gray border-color-extra-medium-gray">View
-                                        cart</a>
-                                    <a href="demo-fashion-store-checkout.html"
-                                        class="btn btn-large btn-dark-gray btn-box-shadow">Checkout</a>
-                                </li>
+                                
                             </ul>
                         </div>
                         <div class="widget-text icon alt-font">
@@ -434,7 +414,7 @@
                             <a href="{{ route('index') }}" class="nav-link">Home</a>
                         </li>
                         <li class="nav-item dropdown submenu">
-                            <a href="demo-fashion-store-shop.html" class="nav-link">Shop</a>
+                            <a href="{{ route('product') }}" class="nav-link">Shop</a>
                             <i class="fa-solid fa-angle-down dropdown-toggle" id="navbarDropdownMenuLink1" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false"></i>
                             <div class="dropdown-menu submenu-content" aria-labelledby="navbarDropdownMenuLink1">
@@ -667,38 +647,7 @@
                             <a href="javascript:void(0);"><i class="feather icon-feather-shopping-bag"></i><span
                                     class="cart-count alt-font text-white bg-dark-gray">2</span></a>
                             <ul class="cart-item-list">
-                                <li class="cart-item align-items-center">
-                                    <a href="javascript:void(0);" class="alt-font close">×</a>
-                                    <div class="product-image">
-                                        <a href="demo-fashion-store-single-product.html"><img
-                                                src="https://via.placeholder.com/600x765" class="cart-thumb" alt=""></a>
-                                    </div>
-                                    <div class="product-detail fw-600">
-                                        <a href="demo-fashion-store-single-product.html">Ribbed tank</a>
-                                        <span class="item-ammount fw-400">1 x $23.00</span>
-                                    </div>
-                                </li>
-                                <li class="cart-item align-items-center">
-                                    <a href="javascript:void(0);" class="alt-font close">×</a>
-                                    <div class="product-image">
-                                        <a href="demo-fashion-store-single-product.html"><img
-                                                src="https://via.placeholder.com/600x765" class="cart-thumb" alt=""></a>
-                                    </div>
-                                    <div class="product-detail fw-600">
-                                        <a href="demo-fashion-store-single-product.html">Pleated dress</a>
-                                        <span class="item-ammount fw-400">2 x $15.00</span>
-                                    </div>
-                                </li>
-                                <li class="cart-total">
-                                    <div class="fs-18 alt-font mb-15px"><span
-                                            class="w-50 fw-500 text-start">Subtotal:</span><span
-                                            class="w-50 text-end fw-700">$199.99</span></div>
-                                    <a href="demo-fashion-store-cart.html"
-                                        class="btn btn-large btn-transparent-light-gray border-color-extra-medium-gray">View
-                                        cart</a>
-                                    <a href="demo-fashion-store-checkout.html"
-                                        class="btn btn-large btn-dark-gray btn-box-shadow">Checkout</a>
-                                </li>
+                                <!-- Product List Show Here -->
                             </ul>
                         </div>
                         <div class="widget-text icon alt-font">
