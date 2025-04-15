@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2)->nullable();
             $table->string('category_id')->nullable();
-            $table->string('color_id')->nullable();
-            $table->string('size_id')->nullable();
+            $table->json('color_id');
+            $table->json('size_id');
             $table->timestamps();
         });
     }
