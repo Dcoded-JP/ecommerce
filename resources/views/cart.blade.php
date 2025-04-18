@@ -52,12 +52,14 @@
                                     </td>
                                     <td class="product-thumbnail">
                                         <a href="{{ route('productDetails', $item->product_id) }}">
-                                            @if(isset($products[$item->product_id]) && $products[$item->product_id]->productImages->isNotEmpty())
-                                                <img class="cart-product-image" src="{{ asset('storage/iproduct_img/' . $products[$item->product_id]->productImages->first()->product_img) }}"
-                                                     alt="{{ $item->name }}">
+                                            @if(isset($products[$item->product_id]) &&
+                                            $products[$item->product_id]->productImages->isNotEmpty())
+                                            <img class="cart-product-image"
+                                                src="{{ asset('storage/iproduct_img/' . $products[$item->product_id]->productImages->first()->product_img) }}"
+                                                alt="{{ $item->name }}">
                                             @else
-                                                <img class="cart-product-image" src="{{ asset('images/placeholder.jpg') }}"
-                                                     alt="{{ $item->name }}">
+                                            <img class="cart-product-image" src="{{ asset('images/placeholder.jpg') }}"
+                                                alt="{{ $item->name }}">
                                             @endif
                                         </a>
                                     </td>
@@ -70,7 +72,7 @@
                                         <span class="fs-14">Size: {{ $item->size }}</span>
                                     </td>
                                     <td class="product-price" data-title="Price">
-                                    ₹{{ isset($products[$item->product_id]) ? $products[$item->product_id]?->price : 'N/A' }}
+                                        ₹{{ isset($products[$item->product_id]) ? $products[$item->product_id]?->price : 'N/A' }}
                                     </td>
                                     <td class="product-quantity" data-title="Quantity">
                                         <div class="quantity">
@@ -92,7 +94,7 @@
                 </div>
                 <div class="row mt-20px">
                     <div class="col-xl-6 col-xxl-7 col-md-6">
-                    <a href="{{ route('product') }}"
+                        <a href="{{ route('product') }}"
                             class="btn btn-small border-1 btn-round-edge btn-transparent-light-gray text-transform-none">Continue
                             shopping</a>
                     </div>
@@ -433,13 +435,15 @@
                             <tr class="total-amount">
                                 <th class="fw-600 text-dark-gray alt-font pb-0">Total</th>
                                 <td class="pb-0" data-title="Total">
-                                <h6 class="d-block fw-700 mb-0 text-dark-gray alt-font">₹ <span id="final-total">{{ $cartItems->sum(function($item) { return $item->product?->price * $item->quantity; }) }}</span></h6>
+                                    <h6 class="d-block fw-700 mb-0 text-dark-gray alt-font">₹ <span
+                                            id="final-total">{{ $cartItems->sum(function($item) { return $item->product?->price * $item->quantity; }) }}</span>
+                                    </h6>
                                     <span class="fs-14">(Includes ₹19.29 tax)</span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <a href="demo-fashion-store-checkout.html"
+                    <a href="{{ route('checkout') }}"
                         class="btn btn-dark-gray btn-large btn-switch-text btn-round-edge btn-box-shadow w-100 mt-25px">
                         <span>
                             <span class="btn-double-text" data-text="Proceed to checkout">Proceed to checkout</span>
@@ -514,7 +518,7 @@ $(document).ready(function() {
 
         // Update the cart subtotal display
         $('#cart-total').text(subtotal.toFixed(2));
-        
+
         // Calculate final total with shipping cost
         let shippingCost = 0;
         if ($('#flat').is(':checked')) {
@@ -525,14 +529,14 @@ $(document).ready(function() {
             // Free shipping is 0rs
             shippingCost = 0;
         }
-        
+
         // Calculate final total
         let finalTotal = subtotal + shippingCost;
-        
+
         // Update the final total display
         $('#final-total').text(finalTotal.toFixed(2));
     }
-    
+
     // Initialize the total on page load
     updateCartTotal();
 });

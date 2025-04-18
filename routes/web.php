@@ -8,6 +8,7 @@ use App\Http\Controllers\IProductController;
 use App\Http\Controllers\ProductImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CheckoutController;
 
 Route::get('/', [SiteController::class, 'index'])->name('index');
 Route::get('/signup', [SiteController::class, 'signup'])->name('signup');
@@ -35,15 +36,15 @@ Route::post('/color/mass-delete', [colorController::class, 'massDelete'])->name(
 Route::resource('/size', SizeController::class);
 Route::post('/size/mass-delete', [sizeController::class, 'massDelete'])->name('size.massDelete');
 
-// //Product Image Crud Route
-// Route::resource('productimage', ProductImageController::class);
-// Route::post('/productimage/mass-delete', [ProductImageController::class, 'massDelete'])->name('productimage.massDelete');
 
-
-// IProduct CRUD
 Route::resource('iproduct', IProductController::class);
 Route::post('/iproduct/mass-delete', [IProductController::class, 'massDelete'])->name('iproduct.massDelete');
 Route::get('/cart', [SiteController::class, 'cart'])->name('cart');
 Route::post('/add-to-cart/{id}', [SiteController::class, 'addToCart'])->name('addToCart');
 Route::delete('/cart/{id}', [SiteController::class, 'removeFromCart'])->name('removeFromCart');
 Route::delete('/cart/empty/all', [SiteController::class, 'emptyCart'])->name('emptyCart');
+Route::get('/checkout', [SiteController::class, 'checkout'])->name('checkout');
+
+// New Checkout and Order routes
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/order/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');

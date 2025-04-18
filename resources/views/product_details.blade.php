@@ -53,43 +53,22 @@
                                         </div>
                                     @endif
                                     <!-- end slider item -->
+                                    @if($product->productImages->isNotEmpty())
+                                    @foreach($product->productImages as $image)
                                     <div class="swiper-slide gallery-box">
-                                        <a href="{{ asset($product->image) }}" data-group="lightbox-gallery"
-                                            title="Relaxed corduroy shirt">
-                                            <img class="w-100" src="{{ asset($product->image) }}" alt="">
+                                        <a href="{{ asset('storage/iproduct_img/' . $image->product_img) }}" data-group="lightbox-gallery"
+                                            title="{{ $product->product_name }}">
+                                            <img class="w-100" src="{{ asset('storage/iproduct_img/' . $image->product_img) }}" alt="">
                                         </a>
                                     </div>
-                                    <!-- end slider item -->
+                                    @endforeach
+                                    @else
                                     <div class="swiper-slide gallery-box">
-                                        <a href="{{ asset($product->image) }}" data-group="lightbox-gallery"
-                                            title="Relaxed corduroy shirt">
-                                            <img class="w-100" src="{{ asset($product->image) }}" alt="">
-                                        </a>
+                                        <img class="w-100" src="{{ asset('images/placeholder.jpg') }}"
+                                            alt="{{ $product->product_name }}">
                                     </div>
-                                    <!-- end slider item -->
-                                    <div class="swiper-slide gallery-box">
-                                        <a href="{{ asset($product->image) }}" data-group="lightbox-gallery"
-                                            title="Relaxed corduroy shirt">
-                                            <img class="w-100" src="{{ asset($product->image) }}" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- end slider item -->
-                                    <!-- end slider item -->
-                                    <div class="swiper-slide gallery-box">
-                                        <a href="{{ asset($product->image) }}" data-group="lightbox-gallery"
-                                            title="Relaxed corduroy shirt">
-                                            <img class="w-100" src="{{ asset($product->image) }}" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- end slider item -->
-                                    <!-- end slider item -->
-                                    <div class="swiper-slide gallery-box">
-                                        <a href="{{ asset($product->image) }}" data-group="lightbox-gallery"
-                                            title="Relaxed corduroy shirt">
-                                            <img class="w-100" src="{{ asset($product->image) }}" alt="">
-                                        </a>
-                                    </div>
-                                    <!-- end slider item -->
+                                    @endif
+                                    
                                 </div>
                             </div>
                         </div>
@@ -155,7 +134,7 @@
                         </ul>
                     </div>
                     <div class="d-flex align-items-center flex-column flex-sm-row mb-20px position-relative">
-                        <form action="{{ route('addToCart', $product->id) }}" method="POST"
+                        <form action="{{ route('addToCart', $product->id) }}" method="POST" id="add-to-cart-form"
                             class="d-flex align-items-center flex-column flex-sm-row mb-20px position-relative">
                             @csrf
                             <input type="hidden" name="name" id="selected_name" value="{{ $product->product_name }}">
@@ -166,7 +145,7 @@
                             </div>
                             <input type="hidden" name="color" id="selected_color" value="">
                             <input type="hidden" name="size" id="selected_size" value="">
-                            <button type="submit"
+                            <button type="button" id="add-to-cart-btn"
                                 class="btn btn-cart btn-extra-large btn-switch-text btn-box-shadow btn-none-transform btn-dark-gray left-icon btn-round-edge border-0 me-15px xs-me-0 order-3 order-sm-2">
                                 <span>
                                     <span><i class="feather icon-feather-shopping-bag"></i></span>
@@ -274,6 +253,28 @@
                 percentPosition: true,
                 masonry: {
                     columnWidth: '.grid-sizer'
+                }
+            });
+
+            // Add to cart validation
+            $('#add-to-cart-btn').on('click', function() {
+                const selectedSize = $('#selected_size').val();
+                
+                if (!selectedSize) {
+                    // Show error message
+                    alert('Please select a size before adding to cart');
+                    // Scroll to size selection
+                    $('html, body').animate({
+                        scrollTop: $('.shop-size').offset().top - 100
+                    }, 500);
+                    // Highlight size selection area
+                    $('.shop-size').addClass('border border-danger');
+                    setTimeout(function() {
+                        $('.shop-size').removeClass('border border-danger');
+                    }, 3000);
+                } else {
+                    // Submit the form if size is selected
+                    $('#add-to-cart-form').submit();
                 }
             });
 

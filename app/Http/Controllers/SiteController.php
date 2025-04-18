@@ -60,18 +60,46 @@ class SiteController extends Controller
 
     public function processLogin(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
-        if (!$user || !Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->back()->with('error', 'Invalid email or password');
+        // Attempt to authenticate the user
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            // Authentication passed
+            $user = Auth::user();
+            
+            // Set up session variables
+            session()->put('user_id', $user->id);
+            session()->put('first_name', $user->first_name);
+            session()->put('last_name', $user->last_name);
+            session()->put('email', $user->email);
+            session()->put('logged_in', true);
+            
+            // Regenerate session for security
+            session()->regenerate();
+
+            // Check if the user is admin and redirect accordingly
+            if ($user->email === 'admin@gmail.com') {
+                return redirect()->route('admin.dashboard')->with('success', 'Welcome to admin dashboard');
+            } else {
+                return redirect()->route('index')->with('success', 'Login successful');
+            }
         }
+        
+        // Authentication failed
+        return redirect()->back()->with('error', 'Invalid email or password');
+    }
 
-        session()->put('user_id', $user->id);
-        session()->put('first_name', $user->first_name);
-        session()->put('last_name', $user->last_name);
-        session()->put('email', $user->email);
-        session()->put('logged_in', true);
-
-        return redirect()->route('index')->with('success', 'Login successful');
+    public function logout()
+    {
+        // Clear Laravel authentication
+        Auth::logout();
+        
+        // Clear all session data
+        session()->forget(['user_id', 'first_name', 'last_name', 'email', 'logged_in']);
+        session()->flush();
+        
+        // Regenerate the session ID for security
+        session()->regenerate(true);
+        
+        return redirect()->route('login')->with('success', 'You have been logged out successfully');
     }
 
     public function shop()
@@ -111,18 +139,25 @@ class SiteController extends Controller
     // }
     public function addToCart(Request $request, $id)
     {
-        if (!Session::has('user_id')) {
-            return redirect()->route('login')->with('error', 'Please login to add items to cart');
-        }
-
         $product = IProduct::find($id);
         if (!$product) {
             return redirect()->back()->with('error', 'Product not found');
         }
 
+        // Check if user is logged in (user_id exists in session)
+        $userId = session('user_id');
+        
+        // If user is not logged in, generate a guest ID for their cart
+        if (!$userId) {
+            if (!session()->has('guest_user_id')) {
+                // Generate a unique guest ID if not already set
+                session()->put('guest_user_id', 'guest_' . uniqid());
+            }
+            $userId = session('guest_user_id');
+        }
 
         $cartItem = CartItem::create([
-            'user_id' => session('user_id'),
+            'user_id' => $userId,
             'product_id' => $id,
             'name' => $product->product_name,
             'color' => $request->color,
@@ -135,11 +170,10 @@ class SiteController extends Controller
 
     public function cart()
     {
-        if (!Session::has('user_id')) {
-            return redirect()->route('login')->with('error', 'Please login to view cart');
-        }
-
-        $cartItems = CartItem::where('user_id', session('user_id'))
+        // Get user ID or guest ID
+        $userId = session('user_id') ?? session('guest_user_id');
+        
+        $cartItems = CartItem::where('user_id', $userId)
             ->get();
 
         // Get all product IDs from cart
@@ -156,12 +190,11 @@ class SiteController extends Controller
 
     public function removeFromCart($id)
     {
-        if (!Session::has('user_id')) {
-            return redirect()->route('login');
-        }
-
+        // Get user ID or guest ID
+        $userId = session('user_id') ?? session('guest_user_id');
+        
         $cartItem = CartItem::where('id', $id)
-            ->where('user_id', session('user_id'))
+            ->where('user_id', $userId)
             ->first();
 
         if ($cartItem) {
@@ -173,11 +206,24 @@ class SiteController extends Controller
 
     public function emptyCart()
     {
-        if (!Session::has('user_id')) {
-            return redirect()->route('login');
-        }
-
-        CartItem::where('user_id', session('user_id'))->delete();
+        // Get user ID or guest ID
+        $userId = session('user_id') ?? session('guest_user_id');
+        
+        CartItem::where('user_id', $userId)->delete();
         return redirect()->route('cart');
+    }
+
+    public function checkout()
+    {
+        // Get user ID or guest ID
+        $userId = session('user_id') ?? session('guest_user_id');
+        
+        $cartItems = CartItem::where('user_id', $userId)->get();
+        $products = IProduct::with(['category', 'colors', 'sizes', 'productImages'])
+            ->whereIn('id', $cartItems->pluck('product_id')->toArray())
+            ->get()
+            ->keyBy('id');
+        $total = $cartItems->sum(function($item) { return $item->product?->price * $item->quantity; });
+        return view('checkout', compact('cartItems', 'products', 'total'));
     }
 }
