@@ -7,11 +7,11 @@
     <div class="container">
         <div class="row align-items-center justify-content-center" data-anime='{ "el": "childs", "translateY": [-15, 0], "opacity": [0,1], "duration": 300, "delay": 0, "staggervalue": 200, "easing": "easeOutQuad" }'>
             <div class="col-12 col-xl-8 col-lg-10 text-center position-relative page-title-extra-large">
-                <h1 class="alt-font fw-600 text-dark-gray mb-10px">Order Confirmation</h1> 
+                <h1 class="alt-font fw-600 text-dark-gray mb-10px">Order Confirmation</h1>
             </div>
             <div class="col-12 breadcrumb breadcrumb-style-01 d-flex justify-content-center">
                 <ul>
-                    <li><a href="{{ route('home') }}">Home</a></li> 
+                    {{-- <li><a href="{{ route('home') }}">Home</a></li>  --}}
                     <li>Order Confirmation</li>
                 </ul>
             </div>
@@ -31,10 +31,10 @@
                     <span class="text-success alt-font fw-600">{{ session('success') }}</span>
                 </div>
                 @endif
-                
+
                 <div class="p-40px lg-p-30px md-p-25px bg-white border-radius-6px box-shadow-large mb-50px">
                     <span class="fs-26 alt-font fw-600 text-dark-gray mb-30px d-block">Thank you for your order!</span>
-                    
+
                     <ul class="list-style-01">
                         <li class="position-relative border-bottom border-color-medium-gray padding-20px-bottom margin-20px-bottom">
                             <span class="text-extra-dark-gray alt-font fw-600">Order Number:</span>
@@ -53,10 +53,10 @@
                             <span class="ms-5px">{{ ucfirst($order->payment_method) }}</span>
                         </li>
                     </ul>
-                    
+
                     <div class="margin-5-rem-top xs-margin-4-rem-top">
                         <span class="fs-22 alt-font fw-600 text-dark-gray mb-30px d-block">Order details</span>
-                        
+
                         <table class="w-100 total-price-table your-order-table">
                             <tbody>
                                 <tr>
@@ -94,19 +94,19 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div class="margin-5-rem-top">
-                        <a href="{{ route('home') }}" class="btn btn-dark-gray btn-medium btn-switch-text btn-round-edge w-100">
+                        {{-- <a href="{{ route('home') }}" class="btn btn-dark-gray btn-medium btn-switch-text btn-round-edge w-100">
                             <span>
                                 <span class="btn-double-text" data-text="Continue Shopping">Continue Shopping</span>
                             </span>
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- end section --> 
+<!-- end section -->
 
-@endsection 
+@endsection

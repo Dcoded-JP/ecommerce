@@ -19,7 +19,7 @@ class CheckoutController extends Controller
         // Get cart items
         $cartItems = [];
         $total = 0;
-        
+
         if (Auth::check()) {
             $cartItems = CartItem::where('user_id', Auth::id())->with('product')->get();
             $total = 0;
@@ -32,7 +32,7 @@ class CheckoutController extends Controller
             $sessionCart = session()->get('cart');
             // Process session cart items if needed
         }
-        
+
         return view('checkout', compact('cartItems', 'total'));
     }
 
@@ -41,6 +41,7 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
+
         // Validate the request
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -63,36 +64,36 @@ class CheckoutController extends Controller
         // Initialize values
         $userId = Auth::id();
         $shippingCost = 0;
-        
+
         // Calculate shipping cost based on method
         if ($request->input('shipping_method') === 'flat') {
             $shippingCost = 50;
         }
-        
+
         try {
             DB::beginTransaction();
-            
+
             // Get cart items - handle both logged-in and guest users
             $cartItems = [];
             $subtotal = 0;
-            
+
             // Get user ID or guest ID for cart lookup
             $cartUserId = session('user_id') ?? session('guest_user_id');
-            
+
             $cartItems = CartItem::where('user_id', $cartUserId)->with('product')->get();
-            
+
             foreach ($cartItems as $item) {
                 if ($item->product) {
                     $subtotal += $item->product->price * $item->quantity;
                 }
             }
-            
+
             // Calculate tax (assuming 10% for this example)
             $tax = $subtotal * 0.10;
-            
+
             // Calculate total
             $total = $subtotal + $shippingCost + $tax;
-            
+
             // Create a new order
             $order = Order::create([
                 'user_id' => $userId, // This will be NULL for guest users
@@ -126,7 +127,7 @@ class CheckoutController extends Controller
                 'total' => $total,
                 'status' => 'pending',
             ]);
-            
+
             // Add order items
             foreach ($cartItems as $item) {
                 if ($item->product) {
@@ -141,26 +142,26 @@ class CheckoutController extends Controller
                     ]);
                 }
             }
-            
+
             // Clear the cart
             CartItem::where('user_id', $cartUserId)->delete();
-            
+
             // Clear the guest user ID if present
             if (session()->has('guest_user_id')) {
                 session()->forget('guest_user_id');
             }
-            
+
             DB::commit();
-            
+
             return redirect()->route('order.confirmation', $order->id)
                 ->with('success', 'Order placed successfully!');
-                
+
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'There was an error processing your order: ' . $e->getMessage());
         }
     }
-    
+
     /**
      * Display the order confirmation page.
      */
@@ -170,10 +171,10 @@ class CheckoutController extends Controller
         if (Auth::check() && $order->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
-        
+
         // Load the order items
         $order->load('items');
-        
+
         return view('order-confirmation', compact('order'));
     }
 }

@@ -384,10 +384,10 @@
                             <div id="collapseThree" class="collapse">
                                 <div class="ps-30px mb-30px mt-15px">
                                     <label class="mb-10px">Account username <span class="text-red">*</span></label>
-                                    <input class="border-radius-4px input-small mb-15px" type="email" required>
+                                    <input class="border-radius-4px input-small mb-15px" type="email" >
                                     <label class="mb-10px">Create account password <span
                                             class="text-red">*</span></label>
-                                    <input class="border-radius-4px input-small" type="email" required>
+                                    <input class="border-radius-4px input-small" type="email" >
                                 </div>
                             </div>
                         </div>
@@ -408,12 +408,12 @@
                                     <div class="col-md-6 mb-15px">
                                         <label class="mb-10px">First name <span class="text-red">*</span></label>
                                         <input class="border-radius-4px input-small" type="text" name="shipping_first_name" aria-label="first-name"
-                                            required>
+                                            >
                                     </div>
                                     <div class="col-md-6 mb-15px">
                                         <label class="mb-10px">Last name <span class="text-red">*</span></label>
                                         <input class="border-radius-4px input-small" type="text" name="shipping_last_name" aria-label="last-name"
-                                            required>
+                                            >
                                     </div>
                                     <div class="col-12 mb-15px">
                                         <label class="mb-10px">Company name (optional)</label>
@@ -869,7 +869,7 @@ $(document).ready(function() {
     function updateCartTotal() {
         // Get the base subtotal from PHP
         let subtotal = parseFloat({{ $total }});
-        
+
         // Update the cart subtotal display
         $('#cart-total').text(subtotal.toFixed(2));
 
@@ -885,13 +885,13 @@ $(document).ready(function() {
         }
 
         console.log("Shipping cost:", shippingCost);
-        
+
         // Calculate final total
         let finalTotal = subtotal + shippingCost;
-        
+
         // Update the final total display
         $('#final-total').text(finalTotal.toFixed(2));
-        
+
         // Also update the main total h6 element
         $('.total-amount h6').text('₹' + finalTotal.toFixed(2));
     }
