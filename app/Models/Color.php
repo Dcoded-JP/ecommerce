@@ -8,7 +8,8 @@ class Color extends Model
 {
     protected $table = 'colors';
     protected $fillable = [
-        'color_name'
+        'color_name',
+        'color_code'
     ];
 
 

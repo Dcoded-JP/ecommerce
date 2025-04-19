@@ -13,9 +13,9 @@ Size
             <div class="col-md-12">
               <div class="card shadow">
                 <div class="card-header">
-                   
+
                     <h3><i class="fa-solid fa-ruler"></i> Size List</h3>
-                
+
 
 
                     <form action="{{Route('size.store')}}" class="form" method="POST">
@@ -75,7 +75,7 @@ Size
                             <td>{{$ct->created_at}}</td>
                             <td>{{$ct->updated_at}}</td>
                             <td>
-                                
+
                                 <a href="{{Route('size.edit', $ct->id)}}" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
 
                                 <form action="{{Route('size.destroy', $ct->id)}}" method="POST" style="display: inline-block">
@@ -125,7 +125,7 @@ Size
         // Handle bulk actions
         $('#actions').on('change', function() {
             var selectedAction = $(this).val();
-            
+
             if (selectedAction === 'delete') {
                 var selectedIds = [];
 
@@ -203,3 +203,51 @@ Size
 </script>
 @endpush
 @endif
+
+@push('css')
+<style>
+
+/* Form General Styling */
+.form-control, .form-select {
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Input Controls & Form Elements */
+.form-control,
+.form-select,
+.select2-container--default .select2-selection--multiple {
+    height: auto;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #2d3748;
+    background-color: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Focus States */
+.form-control:focus,
+.form-select:focus,
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    outline: none;
+}
+
+/* Placeholder Styling */
+.form-control::placeholder {
+    color: #0a0a0a;
+    opacity: 0.7;
+}
+</style>
+@endpush

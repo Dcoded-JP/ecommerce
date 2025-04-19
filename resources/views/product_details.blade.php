@@ -68,7 +68,7 @@
                                             alt="{{ $product->product_name }}">
                                     </div>
                                     @endif
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                                         <input class="d-none" type="radio" id="color-{{ $color->color->color_name }}" name="color"
                                             checked="">
                                         <label for="color-{{ $color->color->color_name }}"><span
-                                                style="background-color: {{ $color->color->color_name }}"></span></label>
+                                                style="background-color: {{ $color->color->color_code ?? $color->color->color_name }}"></span></label>
                                     </li>
                                 @endforeach
                             @endif
@@ -259,7 +259,7 @@
             // Add to cart validation
             $('#add-to-cart-btn').on('click', function() {
                 const selectedSize = $('#selected_size').val();
-                
+
                 if (!selectedSize) {
                     // Show error message
                     alert('Please select a size before adding to cart');

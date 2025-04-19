@@ -34,6 +34,7 @@ Edit Color
 
 
                             <div class="row">
+
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <div class="form-group">
@@ -46,12 +47,23 @@ Edit Color
 
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div class="form-group">
+                                            <label for="cc_name" class="mb-1 bold text-capitalize">Color Code</label>
+                                            <input type="text" name="color_code" placeholder="Enter Color code in hex eg.#000000" class="form-control bg-light" value="{{old('color_code',$color->color_code)}}" id="cc_name">
+                                            @error('color_code')
+                                            <div class="text-danger">{{$message}}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Update Color</button>
-                                     
+
                                     </div>
                                 </div>
                             </div>

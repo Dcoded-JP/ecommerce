@@ -13,15 +13,15 @@ Color
             <div class="col-md-12">
               <div class="card shadow">
                 <div class="card-header">
-                   
+
                     <h3><i class="fa-solid fa-paintbrush"></i> Color List</h3>
-                
+
 
 
                     <form action="{{Route('color.store')}}" class="form" method="POST">
                         @csrf
                         <div class="row mt-3">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="mb-3">
                                     <div class="form-group">
                                         <input type="text" name="color_name" placeholder="Enter Color Name" class="form-control bg-light" value="{{old('color_name')}}" required>
@@ -30,6 +30,17 @@ Color
                                         @enderror
                                     </div>
 
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <div class="form-group">
+                                        <input type="text" name="color_code" placeholder="Enter Color code in hex eg.#000000" class="form-control bg-light" value="{{old('color_code')}}">
+                                        @error('color_code')
+                                        <div class="text-danger">{{$message}}</div>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -57,12 +68,14 @@ Color
                     <table class="table table-bordered table-striped display" id="colorTable" >
                       <thead>
                         <tr>
-                            <th style="max-width: 50px ;font-family:cursive"><input type="checkbox" class="form-check-input" id="selectAll"></th>
-                            <th style="max-width: 50px ;font-family:cursive">ID</th>
-                            <th style="font-family:cursive">Name</th>
-                            <th style="max-width: 200px ;font-family:cursive">Created At</th>
-                            <th style="max-width: 200px ;font-family:cursive">Updated At</th>
-                            <th style="max-width: 200px ;font-family:cursive">Actions</th>
+                            <th style="max-width: 50px; font-family:cursive"><input type="checkbox" class="form-check-input" id="selectAll"></th>
+                            <th style="max-width: 50px; font-family:cursive">ID</th>
+                            <th style="max-width: 200px; font-family:cursive">Name</th>
+                            <th style="max-width: 30px; font-family:cursive">Color</th>
+                            <th style="max-width: 200px; font-family:cursive">#Hex</th>
+                            <th style="max-width: 200px; font-family:cursive">Created At</th>
+                            <th style="max-width: 200px; font-family:cursive">Updated At</th>
+                            <th style="max-width: 200px; font-family:cursive">Actions</th>
                         </tr>
                       </thead>
                      @if($color)
@@ -71,11 +84,19 @@ Color
                         <tr>
                             <td><input type="checkbox" class="color-check form-check-input" value="{{$ct->id}}"></td>
                             <td>{{$ct->id}}</td>
-                            <td><a href="{{Route('color.show', $ct->id)}}" class="btn btn-outline-info" title="Show">{{$ct->color_name}}</a></td>
+                            <td><a href="{{Route('color.show', $ct->id)}}" class="btn btn-outline-info" title="Show">{{$ct->color_name}} </a></td>
+                            <td style="width:6px;"><button style="background-color: {{$ct->color_code ? $ct->color_code : $ct->color_name }};
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                border: none;
+                                display: inline-block;"></button>
+                            </td>
+                            <td>{{$ct->color_code ? $ct->color_code : "Empty" }}</td>
                             <td>{{$ct->created_at}}</td>
                             <td>{{$ct->updated_at}}</td>
                             <td>
-                                
+
                                 <a href="{{Route('color.edit', $ct->id)}}" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
 
                                 <form action="{{Route('color.destroy', $ct->id)}}" method="POST" style="display: inline-block">
@@ -125,7 +146,7 @@ Color
         // Handle bulk actions
         $('#actions').on('change', function() {
             var selectedAction = $(this).val();
-            
+
             if (selectedAction === 'delete') {
                 var selectedIds = [];
 
@@ -203,3 +224,54 @@ Color
 </script>
 @endpush
 @endif
+
+@push('css')
+<style>
+
+/* Form General Styling */
+.form-control, .form-select {
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Input Controls & Form Elements */
+.form-control,
+.form-select,
+.select2-container--default .select2-selection--multiple {
+    height: auto;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #2d3748;
+    background-color: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Focus States */
+.form-control:focus,
+.form-select:focus,
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    outline: none;
+}
+
+/* Placeholder Styling */
+.form-control::placeholder {
+    color: #0a0a0a;
+    opacity: 0.7;
+}
+
+
+</style>
+@endpush
+

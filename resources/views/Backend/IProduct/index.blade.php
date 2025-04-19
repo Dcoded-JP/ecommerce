@@ -90,7 +90,7 @@ Index I-Product
                             <td>
                                 @forelse($ipr->color_details as $color)
                                     <span class="badge bg-primary"
-                                          style="background-color: {{ $color->color_code ?? '#000' }} !important">
+                                          style="background-color: {{ $color->color_code ?? $color_name }} !important">
                                         {{ $color->color_name }}
                                     </span>
                                 @empty

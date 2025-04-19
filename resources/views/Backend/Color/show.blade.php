@@ -36,6 +36,20 @@ Show Color
                                 <td>{{$color->color_name}}</td>
                               </tr>
                               <tr>
+                                <th>Color</th>
+                                <td><button style="background-color: {{$color->color_code ? $color->color_code : $color->color_name }};
+                                    width: 30px;
+                                    height: 30px;
+                                    border-radius: 50%;
+                                    border: none;
+                                    display: inline-block;"></button>
+                                </td>
+                              </tr>
+                              <tr>
+                                <th>Hex</th>
+                                <td>{{$color->color_code}}</td>
+                              </tr>
+                              <tr>
                                 <th>Created At</th>
                                 <td>{{$color->created_at}}</td>
                               </tr>

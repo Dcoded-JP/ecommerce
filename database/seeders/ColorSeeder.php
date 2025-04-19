@@ -1,0 +1,116 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Color;
+use Illuminate\Database\Seeder;
+
+class ColorSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $colors = [
+            ["name" => "Ivory", "hex" => "#FFFFF0"],
+            ["name" => "Beige", "hex" => "#F5F5DC"],
+            ["name" => "Champagne", "hex" => "#F7E7CE"],
+            ["name" => "Taupe", "hex" => "#483C32"],
+            ["name" => "Camel", "hex" => "#C19A6B"],
+            ["name" => "Khaki", "hex" => "#C3B091"],
+            ["name" => "Sand", "hex" => "#F4A460"],
+            ["name" => "Apricot", "hex" => "#FBCEB1"],
+            ["name" => "Peach", "hex" => "#FFDAB9"],
+            ["name" => "Coral", "hex" => "#FF7F50"],
+            ["name" => "Salmon", "hex" => "#FA8072"],
+            ["name" => "Copper", "hex" => "#B87333"],
+            ["name" => "Rust", "hex" => "#B7410E"],
+            ["name" => "Burgundy", "hex" => "#800020"],
+            ["name" => "Cranberry", "hex" => "#D21F3C"],
+            ["name" => "Maroon", "hex" => "#800000"],
+            ["name" => "Plum", "hex" => "#8E4585"],
+            ["name" => "Lavender", "hex" => "#E6E6FA"],
+            ["name" => "Lilac", "hex" => "#C8A2C8"],
+            ["name" => "Mauve", "hex" => "#E0B0FF"],
+            ["name" => "Orchid", "hex" => "#DA70D6"],
+            ["name" => "Magenta", "hex" => "#FF00FF"],
+            ["name" => "Rose", "hex" => "#FF007F"],
+            ["name" => "Cherry Red", "hex" => "#D2042D"],
+            ["name" => "Scarlet", "hex" => "#FF2400"],
+            ["name" => "Ruby", "hex" => "#E0115F"],
+            ["name" => "Garnet", "hex" => "#733635"],
+            ["name" => "Midnight Blue", "hex" => "#191970"],
+            ["name" => "Navy", "hex" => "#000080"],
+            ["name" => "Royal Blue", "hex" => "#4169E1"],
+            ["name" => "Sapphire", "hex" => "#0F52BA"],
+            ["name" => "Cobalt", "hex" => "#0047AB"],
+            ["name" => "Sky Blue", "hex" => "#87CEEB"],
+            ["name" => "Baby Blue", "hex" => "#89CFF0"],
+            ["name" => "Denim", "hex" => "#1560BD"],
+            ["name" => "Powder Blue", "hex" => "#B0E0E6"],
+            ["name" => "Teal", "hex" => "#008080"],
+            ["name" => "Turquoise", "hex" => "#40E0D0"],
+            ["name" => "Aqua", "hex" => "#00FFFF"],
+            ["name" => "Mint", "hex" => "#98FF98"],
+            ["name" => "Emerald", "hex" => "#50C878"],
+            ["name" => "Jade", "hex" => "#00A36C"],
+            ["name" => "Forest Green", "hex" => "#228B22"],
+            ["name" => "Olive", "hex" => "#808000"],
+            ["name" => "Lime", "hex" => "#00FF00"],
+            ["name" => "Chartreuse", "hex" => "#7FFF00"],
+            ["name" => "Moss Green", "hex" => "#8A9A5B"],
+            ["name" => "Celery", "hex" => "#B2F302"],
+            ["name" => "Honey", "hex" => "#FFD700"],
+            ["name" => "Gold", "hex" => "#FFD700"],
+            ["name" => "Bronze", "hex" => "#CD7F32"],
+            ["name" => "Amber", "hex" => "#FFBF00"],
+            ["name" => "Mustard", "hex" => "#FFDB58"],
+            ["name" => "Sunflower", "hex" => "#FFC512"],
+            ["name" => "Canary Yellow", "hex" => "#FFFF99"],
+            ["name" => "Lemon", "hex" => "#FFF44F"],
+            ["name" => "Vanilla", "hex" => "#F3E5AB"],
+            ["name" => "Cream", "hex" => "#FFFDD0"],
+            ["name" => "Snow", "hex" => "#FFFAFA"],
+            ["name" => "Silver", "hex" => "#C0C0C0"],
+            ["name" => "Gunmetal", "hex" => "#2A3439"],
+            ["name" => "Charcoal", "hex" => "#36454F"],
+            ["name" => "Graphite", "hex" => "#3B3B3B"],
+            ["name" => "Slate Gray", "hex" => "#708090"],
+            ["name" => "Ash Gray", "hex" => "#B2BEB5"],
+            ["name" => "Smoky Black", "hex" => "#100C08"],
+            ["name" => "Jet Black", "hex" => "#343434"],
+            ["name" => "Obsidian", "hex" => "#0B0B0B"],
+            ["name" => "Ink Black", "hex" => "#1A1A1A"],
+            ["name" => "Espresso", "hex" => "#613613"],
+            ["name" => "Chocolate", "hex" => "#D2691E"],
+            ["name" => "Walnut", "hex" => "#5C4033"],
+            ["name" => "Mahogany", "hex" => "#C04000"],
+            ["name" => "Caramel", "hex" => "#AF6E4D"],
+            ["name" => "Pine", "hex" => "#01796F"],
+            ["name" => "Cerulean", "hex" => "#007BA7"],
+            ["name" => "Periwinkle", "hex" => "#CCCCFF"],
+            ["name" => "Rosy Brown", "hex" => "#BC8F8F"],
+            ["name" => "Blush", "hex" => "#DE5D83"],
+            ["name" => "Flamingo Pink", "hex" => "#FC74FD"],
+            ["name" => "Grape", "hex" => "#6F2DA8"],
+            ["name" => "Bubblegum Pink", "hex" => "#FFC1CC"],
+            ["name" => "Indigo", "hex" => "#4B0082"],
+            ["name" => "Violet", "hex" => "#EE82EE"],
+            ["name" => "Eggplant", "hex" => "#614051"],
+            ["name" => "Fern Green", "hex" => "#4F7942"],
+            ["name" => "Steel Blue", "hex" => "#4682B4"],
+            ["name" => "Azure", "hex" => "#007FFF"],
+            ["name" => "Sea Green", "hex" => "#2E8B57"],
+            ["name" => "Spruce Green", "hex" => "#2D4438"],
+            ["name" => "Copper Rose", "hex" => "#996666"],
+            ["name" => "Porcelain", "hex" => "#E8E3E0"],
+            ["name" => "Oyster", "hex" => "#E2DFD2"],
+            ["name" => "Almond", "hex" => "#EFDECD"]
+        ];
+
+        foreach ($colors as $color) {
+            Color::create([
+                'color_name' => $color['name'],
+                'color_code' => $color['hex']
+            ]);
+        }
+    }
+}

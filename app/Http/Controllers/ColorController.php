@@ -33,6 +33,7 @@ class ColorController extends Controller
 
         $validatedColor = $request->validate([
             'color_name'=> 'required|unique:colors|max:255',
+            'color_code'=> 'nullable|unique:colors|regex:/^#[0-9A-Fa-f]{3,6}$/',
         ]);
 
         Color::create($validatedColor);
@@ -75,7 +76,9 @@ public function update(Request $request, $id)
     // Validate the request
     $validatedData = $request->validate([
         'color_name' => 'required|max:255|unique:colors,color_name,'.$id,
+        'color_code'=> 'nullable|unique:colors,color_code,'.$id.'|regex:/^#[0-9A-Fa-f]{6}$/',
     ]);
+
 
     // Update the color
     $color->update($validatedData);
@@ -83,7 +86,7 @@ public function update(Request $request, $id)
     // Redirect with success message
     return redirect()
         ->route('color.index')
-        ->with('success', 'color updated successfully');
+        ->with('success', 'Color updated successfully');
 }
 
     /**
