@@ -48,3 +48,5 @@ Route::get('/checkout', [SiteController::class, 'checkout'])->name('checkout');
 // New Checkout and Order routes
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/order/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
+
+Route::get('/order.details/{id}', [DashboardController::class, 'showOrder'])->name('orderdetails.show');

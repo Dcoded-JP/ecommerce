@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\IProductColor;
 use App\Models\IProductSize;
 use App\Models\User;
-use Auth;
 use Illuminate\Http\Request;
-use Session;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\IProduct;
 use App\Models\Category;
@@ -17,9 +17,9 @@ class SiteController extends Controller
 {
     public function index()
     {
-        // if (!Session::has('user_id')) {
-        //     return redirect()->route('signup');
-        // }
+        if (!Session::has('user_id')) {
+            return redirect()->route('signup');
+        }
         return view('index');
     }
 
@@ -64,14 +64,14 @@ class SiteController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             // Authentication passed
             $user = Auth::user();
-            
+
             // Set up session variables
             session()->put('user_id', $user->id);
             session()->put('first_name', $user->first_name);
             session()->put('last_name', $user->last_name);
             session()->put('email', $user->email);
             session()->put('logged_in', true);
-            
+
             // Regenerate session for security
             session()->regenerate();
 
@@ -82,7 +82,7 @@ class SiteController extends Controller
                 return redirect()->route('index')->with('success', 'Login successful');
             }
         }
-        
+
         // Authentication failed
         return redirect()->back()->with('error', 'Invalid email or password');
     }
@@ -91,14 +91,14 @@ class SiteController extends Controller
     {
         // Clear Laravel authentication
         Auth::logout();
-        
+
         // Clear all session data
         session()->forget(['user_id', 'first_name', 'last_name', 'email', 'logged_in']);
         session()->flush();
-        
+
         // Regenerate the session ID for security
         session()->regenerate(true);
-        
+
         return redirect()->route('login')->with('success', 'You have been logged out successfully');
     }
 
@@ -146,7 +146,7 @@ class SiteController extends Controller
 
         // Check if user is logged in (user_id exists in session)
         $userId = session('user_id');
-        
+
         // If user is not logged in, generate a guest ID for their cart
         if (!$userId) {
             if (!session()->has('guest_user_id')) {
@@ -172,7 +172,7 @@ class SiteController extends Controller
     {
         // Get user ID or guest ID
         $userId = session('user_id') ?? session('guest_user_id');
-        
+
         $cartItems = CartItem::where('user_id', $userId)
             ->get();
 
@@ -192,7 +192,7 @@ class SiteController extends Controller
     {
         // Get user ID or guest ID
         $userId = session('user_id') ?? session('guest_user_id');
-        
+
         $cartItem = CartItem::where('id', $id)
             ->where('user_id', $userId)
             ->first();
@@ -208,7 +208,7 @@ class SiteController extends Controller
     {
         // Get user ID or guest ID
         $userId = session('user_id') ?? session('guest_user_id');
-        
+
         CartItem::where('user_id', $userId)->delete();
         return redirect()->route('cart');
     }
@@ -217,7 +217,7 @@ class SiteController extends Controller
     {
         // Get user ID or guest ID
         $userId = session('user_id') ?? session('guest_user_id');
-        
+
         $cartItems = CartItem::where('user_id', $userId)->get();
         $products = IProduct::with(['category', 'colors', 'sizes', 'productImages'])
             ->whereIn('id', $cartItems->pluck('product_id')->toArray())

@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\IProduct;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class DashboardController extends Controller
 {
@@ -20,12 +21,15 @@ class DashboardController extends Controller
         $totleCategories = $this->getCategory();
         $monthlySales = $this->getMonthlySales(); // Add method to get monthly sales
         $categoryDistribution = $this->getCategoryDistribution(); // Add method to get category distribution
-
+        $order=Order::all();
+        $orderItem=OrderItem::all();
         return view('Backend.Dashboard.dashboard', compact(
             'totleCategories',
             'monthlySales',
             'categoryDistribution',
             'totalProducts',
+            'order',
+            'orderItem'
         ));
     }
 
@@ -65,5 +69,11 @@ class DashboardController extends Controller
 
     private function getTotalProduct(){
         return (IProduct::count());
+    }
+
+    public function showOrder($id){
+        $o=Order::find($id);
+        $oi=OrderItem::where('order_id',$id);
+        return view('Backend.Dashboard.orderShow',compact('o','oi'));
     }
 }

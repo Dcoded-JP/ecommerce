@@ -140,50 +140,50 @@ Dashboard
           <div class="card">
             <div class="card-header">
               <i class="fas fa-shopping-cart me-2"></i>
-              Recent Orders
+              Orders
+
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover" id="orderTable">
                   <thead>
+                    {{-- 'order',
+                    'orderItem' --}}
                     <tr>
-                      <th>Order ID</th>
-                      <th>Customer</th>
-                      <th>Items</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th>Total</th>
-                      <th>Action</th>
+
+                      <th style="max-width: 200px ;font-family:cursive">Order ID</th>
+                      <th style="max-width: 200px ;font-family:cursive">Customer ID</th>
+                      <th style="max-width: 200px ;font-family:cursive">Customer Name</th>
+                      <th style="max-width: 200px ;font-family:cursive">Date</th>
+                      <th style="max-width: 200px ;font-family:cursive">Status</th>
+                      <th style="max-width: 200px ;font-family:cursive">Total Price</th>
+                      <th style="max-width: 200px ;font-family:cursive">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>#ORD-2023-001</td>
-                      <td>John Doe</td>
-                      <td>2</td>
-                      <td>Today, 10:45 AM</td>
-                      <td><span class="badge bg-warning text-dark">Processing</span></td>
-                      <td>$149.99</td>
-                      <td><button class="btn btn-sm btn-outline-primary">View</button></td>
-                    </tr>
-                    <tr>
-                      <td>#ORD-2023-002</td>
-                      <td>Jane Smith</td>
-                      <td>1</td>
-                      <td>Today, 09:30 AM</td>
-                      <td><span class="badge bg-success">Completed</span></td>
-                      <td>$79.99</td>
-                      <td><button class="btn btn-sm btn-outline-primary">View</button></td>
-                    </tr>
-                    <tr>
-                      <td>#ORD-2023-003</td>
-                      <td>Robert Johnson</td>
-                      <td>3</td>
-                      <td>Yesterday</td>
-                      <td><span class="badge bg-info">Shipped</span></td>
-                      <td>$210.50</td>
-                      <td><button class="btn btn-sm btn-outline-primary">View</button></td>
-                    </tr>
+                    @if($order)
+                        @foreach($order as $o)
+                            <tr>
+
+                                <td>{{$o->id ? $o->id : 'null'}}</td>
+                                <td>{{$o->user_id ? $o->user_id : 'null'}}</td>
+                                <td>{{$o->first_name ? $o->first_name : 'null'}} {{$o->last_name ? $o->last_name : 'null'}}</td>
+                                <td>{{$o->created_at ? $o->created_at : 'null'}}</td>
+                                <td>Status here</td>
+                                <td>{{$o->total ? $o->total : 'null'}}</td>
+                                <td>
+                                    <a href="{{Route('orderdetails.show',$o->id)}}" class="btn btn-outline-info" title="Show"><i class="fas fa-eye"></i></a>
+                                    <a href="" class="btn btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+
+                                    <form action="" method="POST" style="display: inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this?')"><i class="fa-solid fa-trash" title="Delete" ></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                   </tbody>
                 </table>
               </div>
@@ -244,5 +244,20 @@ Dashboard
         responsive: true
     }
   });
-  </script>
+
+
+
+
+
+
+
+
+    $(document).ready(function () {
+        // DataTable initialization
+        var table = $('#orderTable').DataTable();
+    });
+
+
+</script>
 @endpush
+
