@@ -73,7 +73,7 @@ class DashboardController extends Controller
 
     public function showOrder($id){
         $o=Order::find($id);
-        $oi=OrderItem::where('order_id',$id);
+       $oi=OrderItem::where('order_id',$id)->get();
         return view('Backend.Dashboard.orderShow',compact('o','oi'));
     }
 }

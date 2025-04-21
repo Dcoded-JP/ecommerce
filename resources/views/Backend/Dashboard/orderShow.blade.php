@@ -26,7 +26,7 @@
                                     <strong>Phone:</strong> {{ $o->phone }}<br>
                                     <strong>Address:</strong><br>
                                     {{ $o->street_address }}<br>
-                                    {{ $o->apartment ? $o->apartment . '<br>' : '' }}
+                                    {{ $o->apartment ? $o->apartment  : '' }}&nbsp; <br>
                                     {{ $o->city }}, {{ $o->state }} {{ $o->zip_code }}<br>
                                     {{ $o->country }}
                                 </p>
@@ -39,7 +39,7 @@
                                     <strong>Company:</strong> {{ $o->shipping_company_name ?? 'N/A' }}<br>
                                     <strong>Address:</strong><br>
                                     {{ $o->shipping_street_address }}<br>
-                                    {{ $o->shipping_apartment ? $o->shipping_apartment . '<br>' : '' }}
+                                    {{ $o->shipping_apartment ? $o->shipping_apartment  : '' }}&nbsp;
                                     {{ $o->shipping_city }}, {{ $o->shipping_state }} {{ $o->shipping_zip_code }}<br>
                                     {{ $o->shipping_country }}
                                 </p>
@@ -61,18 +61,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     @foreach($oi as $item)
-                                    {{-- <tr> --}}
-                                        {{-- <td>{{ $item->product_name }}</td> --}}
-                                        {{-- <td>{{ $item->size }}</td> --}}
-                                        {{-- <td>
-                                            <span class="color-dot" style="background-color: {{ $item->color }}"></span>
+
+                                  <tr>
+
+                                     <td>{{ $item->product_name }}</td>
+                                      <td>{{ $item->size }}</td>
+                                     <td>
+                                            <span class="color-dot" style="background-color: {{ $item->color }}" title=" {{ $item->color }}"></span>
                                             {{ $item->color }}
-                                        </td> --}}
-                                        {{-- <td>${{ number_format($item->price, 2) }}</td> --}}
-                                        {{-- <td>{{ $item->quantity }}</td> --}}
-                                        {{-- <td>${{ number_format($item->price * $item->quantity, 2) }}</td>
-                                    </tr> --}}
+                                        </td>
+                                       <td>${{ number_format($item->price, 2) }}</td>
+                                       <td>{{ $item->quantity }}</td>
+                                       <td>${{ number_format($item->price * $item->quantity, 2) }}</td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>

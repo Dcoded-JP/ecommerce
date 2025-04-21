@@ -1,6 +1,6 @@
   <!-- Footer -->
   <div class="footer">
-    &copy; 2025 FashionAdmin. All rights reserved.
+    &copy; 2025 Crafto. All rights reserved.
   </div>
 
   <!-- Bootstrap JS -->
